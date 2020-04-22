@@ -1,0 +1,590 @@
+{
+  "id": "b6s4oE",
+  "title": "Continued Training Questionnaire (Part 2)",
+  "theme": {
+    "href": "https://api.typeform.com/themes/az2vZn"
+  },
+  "workspace": {
+    "href": "https://api.typeform.com/workspaces/9M4eRb"
+  },
+  "settings": {
+    "is_public": true,
+    "is_trial": false,
+    "language": "en",
+    "progress_bar": "percentage",
+    "show_progress_bar": false,
+    "show_typeform_branding": false,
+    "meta": {
+      "allow_indexing": false
+    }
+  },
+  "thankyou_screens": [
+    {
+      "ref": "31e58821-38e5-4aef-a581-6a7b50b3156c",
+      "title": "Thank you for participating!",
+      "properties": {
+        "show_button": true,
+        "share_icons": false,
+        "button_mode": "redirect",
+        "button_text": "Finish",
+        "redirect_url": "https://fundrazr.com/Ministudy2?ref=ab_68kZy6"
+      }
+    },
+    {
+      "ref": "90537705-6366-40d6-bad0-53da68e1ff29",
+      "title": "Your submission for {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} has been saved!",
+      "properties": {
+        "show_button": true,
+        "share_icons": false,
+        "button_mode": "redirect",
+        "button_text": "Continue",
+        "redirect_url": "https://behaviorstudies.typeform.com/to/si7Re5?id={{hidden:id}}&msg=We%20have%20submissions%20for%3A&list={{hidden:list}}{{hidden:sep}}{{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}}&sep=%2C%20"
+      }
+    },
+    {
+      "ref": "default_tys",
+      "title": "Done! Your information was sent perfectly.",
+      "properties": {
+        "show_button": false,
+        "share_icons": false
+      }
+    }
+  ],
+  "fields": [
+    {
+      "id": "Z0JxySVpiVsG",
+      "title": "What is the name of the dog you would like to submit a response for?",
+      "ref": "0e332c28-e4f6-4ed7-89d3-9f84eacf3251",
+      "properties": {
+        "description": "{{hidden:msg}}{{hidden:list}}"
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "short_text"
+    },
+    {
+      "id": "LSu1NqNeHyN3",
+      "title": "Is  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} 12 months or older?",
+      "ref": "38e0f3f4-4041-4b80-ab4c-e3c1164cc56f",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "id": "DbjMjpkvzxuH",
+      "title": "If  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} is older than 12 months today, enter their age in years:\n(numeric input)",
+      "ref": "787b2bbc-e785-44e7-baea-35a84734915b",
+      "validations": {
+        "required": true,
+        "min_value": 1,
+        "max_value": 40
+      },
+      "type": "number"
+    },
+    {
+      "id": "dPkMF8WE3xGx",
+      "title": "Did you acquire {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} between 2 and 6 months?",
+      "ref": "872fbcac-a8b1-4ea6-9121-50c643677916",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "id": "K9fcEwCRQp38",
+      "title": "Did  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} attend puppy training classes between 2 and 6 months?",
+      "ref": "d7ad8052-e93c-418e-ad3d-144d9a94763e",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": false,
+        "allow_other_choice": false,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "id": "pwwpBxP4HDrD",
+            "ref": "dc3c5f2d-c9e4-4324-9c61-9aa382cc07b8",
+            "label": "Yes"
+          },
+          {
+            "id": "BI0lxcNsqBeI",
+            "ref": "06ccf16b-8320-48e0-838d-74fd3939ca0c",
+            "label": "No"
+          },
+          {
+            "id": "R4DCEXOZQ0XN",
+            "ref": "c03c39d4-1db8-4e71-8a72-43b5dc91cd42",
+            "label": "I don\u2019t know"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "id": "J72HAFFBcF0e",
+      "title": "What style of training was taught to you and{{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} during class?",
+      "ref": "0e19d812-a495-48f6-98a8-05fd36233bde",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": false,
+        "allow_other_choice": false,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "id": "fXNCiXH8Rwpd",
+            "ref": "dc3c5f2d-c9e4-4324-9c61-9aa382cc07b8",
+            "label": "Reward based"
+          },
+          {
+            "id": "iJYdSimVwH9Y",
+            "ref": "06ccf16b-8320-48e0-838d-74fd3939ca0c",
+            "label": "Discipline based"
+          },
+          {
+            "id": "kICXcG3lfny5",
+            "ref": "c03c39d4-1db8-4e71-8a72-43b5dc91cd42",
+            "label": "Mixed balance of both reward and discipline"
+          },
+          {
+            "id": "isnV9XUGxYV2",
+            "ref": "31d7346a-68cf-4501-b0dd-1b76357318aa",
+            "label": "I don\u2019t know"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "id": "UxDX035D4Nge",
+      "title": "Where was puppy training offered?",
+      "ref": "4705a30f-325e-45b3-9ed6-c747d597c4f5",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": false,
+        "allow_other_choice": false,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "id": "pva5mHoyNkKN",
+            "ref": "dc3c5f2d-c9e4-4324-9c61-9aa382cc07b8",
+            "label": "Myself/family member attended group classes"
+          },
+          {
+            "id": "U7GMKBQAtowm",
+            "ref": "06ccf16b-8320-48e0-838d-74fd3939ca0c",
+            "label": "Hired private in-home trainer"
+          },
+          {
+            "id": "psQVVjkLpioE",
+            "ref": "c03c39d4-1db8-4e71-8a72-43b5dc91cd42",
+            "label": "Sent to a professional training school/boot camp"
+          },
+          {
+            "id": "tQ4jVufLQnUp",
+            "ref": "f86012d7-f95c-43ac-8cee-17ebbf971086",
+            "label": "I don\u2019t know"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "id": "RS3kqjdD5Y3b",
+      "title": "Did {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} attend any training classes after 6 months of age?",
+      "ref": "80e54971-f2a6-4e0c-bcc2-606fc2abea73",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "id": "vhbTgwg9ViUi",
+      "title": "What style of training was used?",
+      "ref": "bb30e62a-77d7-4663-a6dd-aa3427728a47",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": false,
+        "allow_other_choice": false,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "id": "qcaCKXJ8BtpJ",
+            "ref": "250f9e56-7f05-429c-b26f-718927990e80",
+            "label": "Reward based"
+          },
+          {
+            "id": "ZD9MogsAA6gW",
+            "ref": "626655b3-2cf0-444a-8c23-aa3cca901d77",
+            "label": "Discipline based"
+          },
+          {
+            "id": "w2sit1N2sJN4",
+            "ref": "515dc985-8d49-4a94-9769-e0ba3a4cc393",
+            "label": "Mixed balance of both reward and discipline"
+          },
+          {
+            "id": "PtxE7hAepwvF",
+            "ref": "6997bf1e-c59c-4eef-afff-884085dd5b83",
+            "label": "I don\u2019t know"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "id": "fottQ7ZsYhiM",
+      "title": "Who trained you and  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}}?",
+      "ref": "a0b35165-279e-426a-90d4-bee83a05bc0e",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": false,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "id": "B3GUAsj85wyx",
+            "ref": "23de54ff-5207-42e5-9e6a-94d9a5952b6c",
+            "label": "Myself/family member attended group classes"
+          },
+          {
+            "id": "maabqrxNkyco",
+            "ref": "c0d85953-5e3b-4e11-9c3d-b27be9892d70",
+            "label": "Hired in home private trainer"
+          },
+          {
+            "id": "YGHhuvgC4ejQ",
+            "ref": "cb0f3d49-d756-4b99-94cc-759a1fa70921",
+            "label": "Sent to professional training school/boot camp"
+          },
+          {
+            "id": "TPbGpiz9NS33",
+            "ref": "c8991174-5dc2-435c-a792-a66f0c67c162",
+            "label": "I don\u2019t know"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "id": "ZhW708OgBgtF",
+      "title": "At what age did you complete training {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}}?",
+      "ref": "b91a2f06-7d28-4f7c-8ee2-edb803050af2",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": false,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "id": "iNvRtC5vY5HU",
+            "ref": "1cd3e3a5-b1d8-4c27-a2fa-9fa2da705bf3",
+            "label": "6 to 18 months (adolescence)"
+          },
+          {
+            "id": "W9Musi3Kzr6I",
+            "ref": "16f62182-6668-4845-b726-64c549bfd5f9",
+            "label": "24 months (adult)"
+          },
+          {
+            "id": "qHzh4HE247Iw",
+            "ref": "0a50feeb-0c0d-4be1-89b7-7681382df7da",
+            "label": "Continue to attend classes periodically (nose work, agility, trick training, etc.)"
+          },
+          {
+            "id": "pabDyGambKe4",
+            "ref": "eb181fdb-c6df-461d-8eec-43fb9adb0d4a",
+            "label": "Continue to practice and use training skills in home"
+          },
+          {
+            "id": "r2hP6azRTcrL",
+            "ref": "51fbb218-fef8-4242-946e-8c23fd3e0218",
+            "label": "I don\u2019t remember"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "id": "kRdMF1uROg0c",
+      "title": "Does {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} display problem behaviors today?",
+      "ref": "ff095232-4ca2-4a0a-90f0-217dd7ad867c",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "id": "C5kDeGMIVtTv",
+      "title": "What behviors does  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} display?",
+      "ref": "adadaca4-220f-4aa2-91a6-bf8697ef3128",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "id": "adtFXIvKiRPq",
+            "ref": "dc7952e4-ee80-465e-988e-99cc4b5d366d",
+            "label": "Attention seeking (i.e. barks at you)"
+          },
+          {
+            "id": "IH7xLnaw58Th",
+            "ref": "597e1af8-1bac-4c1f-966b-abed8c47d635",
+            "label": "Pulls on leash while walking"
+          },
+          {
+            "id": "p1Oxn14BhYSE",
+            "ref": "45c193b0-688d-4fdc-bfba-1eafcede544d",
+            "label": "Follows/shadows me before leaving home"
+          },
+          {
+            "id": "G4hyl4YznEGo",
+            "ref": "ba1b5550-96a4-4903-89c8-35c1f1fac6b5",
+            "label": "Destructive inside the home"
+          },
+          {
+            "id": "PgxPhiVIFSgi",
+            "ref": "c1c3ba6a-1c10-4e0b-897f-a3e564a54c59",
+            "label": "Fear of known people (family members)"
+          },
+          {
+            "id": "wEKq0Genxibw",
+            "ref": "c25a0e97-6df4-4d55-869b-9ba20a7e0f79",
+            "label": "Fear of strange people"
+          },
+          {
+            "id": "AXfrgtYVrszX",
+            "ref": "2330ee6f-9736-4625-a3e9-d5865baf9359",
+            "label": "Fear of noise"
+          },
+          {
+            "id": "JeOVzFhpxQyN",
+            "ref": "a3cfed2c-0aa7-4f14-ac77-320c4b32d209",
+            "label": "Fear of being alone"
+          },
+          {
+            "id": "XjYLwDe6KO7c",
+            "ref": "9a0363db-f43d-424d-9572-b1e95ee064fa",
+            "label": "Aggression toward known people (family member)"
+          },
+          {
+            "id": "wJR9iWAtWmJq",
+            "ref": "63d629e3-3031-4586-a08c-b58246a76915",
+            "label": "Aggression toward strange people"
+          },
+          {
+            "id": "OPZ6ubKhHDFf",
+            "ref": "bf0005bd-be53-4bda-908d-268e1112d174",
+            "label": "Aggression toward known dogs"
+          },
+          {
+            "id": "o0ars9OVlSvA",
+            "ref": "0095ffd8-f68e-4306-84c6-8b9c51bb00c4",
+            "label": "Aggression toward strange dogs"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "id": "Hojr3HJQIwby",
+      "title": "Would you like to enter information for another dog you own?",
+      "ref": "abe8b15c-81e1-4333-b723-4cc7af72ce25",
+      "validations": {
+        "required": false
+      },
+      "type": "yes_no"
+    }
+  ],
+  "hidden": [
+    "id",
+    "msg",
+    "list",
+    "sep"
+  ],
+  "logic": [
+    {
+      "type": "field",
+      "ref": "abe8b15c-81e1-4333-b723-4cc7af72ce25",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "thankyou",
+              "value": "90537705-6366-40d6-bad0-53da68e1ff29"
+            }
+          },
+          "condition": {
+            "op": "is",
+            "vars": [
+              {
+                "type": "field",
+                "value": "abe8b15c-81e1-4333-b723-4cc7af72ce25"
+              },
+              {
+                "type": "constant",
+                "value": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "ref": "d7ad8052-e93c-418e-ad3d-144d9a94763e",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "80e54971-f2a6-4e0c-bcc2-606fc2abea73"
+            }
+          },
+          "condition": {
+            "op": "is",
+            "vars": [
+              {
+                "type": "field",
+                "value": "d7ad8052-e93c-418e-ad3d-144d9a94763e"
+              },
+              {
+                "type": "choice",
+                "value": "06ccf16b-8320-48e0-838d-74fd3939ca0c"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "ref": "38e0f3f4-4041-4b80-ab4c-e3c1164cc56f",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "787b2bbc-e785-44e7-baea-35a84734915b"
+            }
+          },
+          "condition": {
+            "op": "is",
+            "vars": [
+              {
+                "type": "field",
+                "value": "38e0f3f4-4041-4b80-ab4c-e3c1164cc56f"
+              },
+              {
+                "type": "constant",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "872fbcac-a8b1-4ea6-9121-50c643677916"
+            }
+          },
+          "condition": {
+            "op": "always",
+            "vars": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "ref": "80e54971-f2a6-4e0c-bcc2-606fc2abea73",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "bb30e62a-77d7-4663-a6dd-aa3427728a47"
+            }
+          },
+          "condition": {
+            "op": "is",
+            "vars": [
+              {
+                "type": "field",
+                "value": "80e54971-f2a6-4e0c-bcc2-606fc2abea73"
+              },
+              {
+                "type": "constant",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "ff095232-4ca2-4a0a-90f0-217dd7ad867c"
+            }
+          },
+          "condition": {
+            "op": "always",
+            "vars": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "ref": "ff095232-4ca2-4a0a-90f0-217dd7ad867c",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "abe8b15c-81e1-4333-b723-4cc7af72ce25"
+            }
+          },
+          "condition": {
+            "op": "always",
+            "vars": []
+          }
+        }
+      ]
+    }
+  ],
+  "_links": {
+    "display": "https://behaviorstudies.typeform.com/to/b6s4oE"
+  }
+}

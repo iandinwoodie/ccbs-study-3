@@ -1,0 +1,136 @@
+{
+  "id": "A4nDvf",
+  "title": "Continued Training Questionnaire",
+  "theme": {
+    "href": "https://api.typeform.com/themes/az2vZn"
+  },
+  "workspace": {
+    "href": "https://api.typeform.com/workspaces/9M4eRb"
+  },
+  "settings": {
+    "is_public": true,
+    "is_trial": false,
+    "language": "en",
+    "progress_bar": "percentage",
+    "show_progress_bar": false,
+    "show_typeform_branding": false,
+    "meta": {
+      "allow_indexing": false
+    },
+    "redirect_after_submit_url": "https://behaviorstudies.typeform.com/to/b6s4oE?id={{field:e952dc38-02ef-483c-8331-0cbb083a54ba}}&msg=%00&list=%00&sep=%20"
+  },
+  "welcome_screens": [
+    {
+      "ref": "f5e71103-29dd-4f15-945d-b50639171fa0",
+      "title": "\nContinued Training Questionnaire                                                           ",
+      "properties": {
+        "show_button": true,
+        "description": "Center for Canine Behavior Studies\nA nonprofit 501(3)(c) organization",
+        "button_text": "Start"
+      }
+    }
+  ],
+  "thankyou_screens": [
+    {
+      "ref": "0cfb6e59-1382-4b5d-b572-95dc2240f54b",
+      "title": "",
+      "properties": {
+        "show_button": true,
+        "share_icons": true,
+        "button_mode": "reload",
+        "button_text": "again"
+      }
+    },
+    {
+      "ref": "default_tys",
+      "title": "Done! Your information was sent perfectly.",
+      "properties": {
+        "show_button": false,
+        "share_icons": false
+      }
+    }
+  ],
+  "fields": [
+    {
+      "id": "TxMMStLIHYne",
+      "title": "First, let\u2019s start with some information about you",
+      "ref": "f2752fa8-4007-4d11-9f9e-420f774b5622",
+      "properties": {
+        "show_button": true,
+        "button_text": "Continue",
+        "fields": [
+          {
+            "id": "oJMcP4BoXnlr",
+            "title": "What is your email?",
+            "ref": "e952dc38-02ef-483c-8331-0cbb083a54ba",
+            "properties": {
+              "description": "We use emails to differentiate you from other dog owners."
+            },
+            "validations": {
+              "required": true
+            },
+            "type": "email"
+          },
+          {
+            "id": "oZPujjGOGtKp",
+            "title": "What is your postal code (zip code)?",
+            "ref": "e46b4e73-089c-4fcc-83ce-6db7e1a9cc3b",
+            "properties": {
+              "description": "We collect postal codes so that we may determine if our results apply regionally or globally."
+            },
+            "validations": {
+              "required": false
+            },
+            "type": "short_text"
+          },
+          {
+            "id": "KeVopP8xqDDn",
+            "title": "What is your gender?",
+            "ref": "82d7ec10-534c-4b86-b4c0-992de0fb5c16",
+            "properties": {
+              "description": "We collect dog owner gender so that we may detect its role in the trends we discover.",
+              "randomize": false,
+              "allow_multiple_selection": false,
+              "allow_other_choice": false,
+              "vertical_alignment": true,
+              "choices": [
+                {
+                  "id": "iy8VR9dAgVOQ",
+                  "ref": "f3f38ffc-3171-4224-93ea-5570cedfc147",
+                  "label": "Female"
+                },
+                {
+                  "id": "dK5A72RkNCPe",
+                  "ref": "650e7e16-2823-4b72-8924-4dd442279c1a",
+                  "label": "Male"
+                }
+              ]
+            },
+            "validations": {
+              "required": false
+            },
+            "type": "multiple_choice"
+          },
+          {
+            "id": "QOIGM5AcrXpJ",
+            "title": "What is your age?",
+            "ref": "3805f120-3234-4391-a099-ee175a30d959",
+            "properties": {
+              "description": "We collect dog owner age so that we can determine if it plays a role in the canine behaviors we are studying."
+            },
+            "validations": {
+              "required": false,
+              "min_value": 0,
+              "max_value": 130
+            },
+            "type": "number"
+          }
+        ]
+      },
+      "type": "group"
+    }
+  ],
+  "_links": {
+    "display": "https://behaviorstudies.typeform.com/to/A4nDvf"
+  }
+}
