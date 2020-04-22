@@ -1,7 +1,7 @@
 CCBS = python3 -m ccbs
 PIP = pip3
 REQ = requirements.txt
-COMMANDS = fetch-form update-update init freeze
+COMMANDS = help fetch update init freeze
 
 default: help
 
