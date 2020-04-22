@@ -1,7 +1,7 @@
 CCBS = python3 -m ccbs
 PIP = pip3
 REQ = requirements.txt
-COMMANDS = help fetch update init freeze
+COMMANDS = help pull push init freeze
 
 default: help
 
@@ -9,7 +9,7 @@ help:
 	@echo "Please do 'make COMMAND' where COMMAND is one of these:"
 	@echo "  $(COMMANDS)"
 
-fetch update:
+push pull:
 	$(CCBS) $@ owner
 	$(CCBS) $@ dog
 

@@ -1,7 +1,7 @@
 """
 Usage:
-  ccbs.py fetch (owner | dog)
-  ccbs.py update (owner | dog)
+  ccbs.py pull (owner | dog)
+  ccbs.py push (owner | dog)
   ccbs.py -h | --help
 
 Options:
@@ -29,15 +29,15 @@ def main():
     # Initialize a form based on the requested type.
     form = get_requested_form(args, settings)
     # Perform the requested action with the form.
-    if args['fetch']:
+    if args['pull']:
         form.contents = typeform.forms.get(form.id)
         with open(form.filepath, 'w') as fout:
             json.dump(form.contents, fout, indent=2)
-    elif args['update']:
+    elif args['push']:
         with open(form.filepath, 'r') as fin:
             form.contents = json.load(fin)
         response = typeform.forms.update(form.id, form.contents)
         if not response == form.contents:
-            raise Exception('The response does not match the requested update.')
+            raise Exception('The response does not match the requested push.')
     else:
         raise Exception('Unexpected arguments were tendered.')
