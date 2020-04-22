@@ -32,13 +32,13 @@
     },
     {
       "ref": "90537705-6366-40d6-bad0-53da68e1ff29",
-      "title": "Your submission for {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} has been saved!",
+      "title": "Your submission for {{field:dog-name}} has been saved!",
       "properties": {
         "show_button": true,
         "share_icons": false,
         "button_mode": "redirect",
         "button_text": "Continue",
-        "redirect_url": "https://behaviorstudies.typeform.com/to/si7Re5?id={{hidden:id}}&msg=We%20have%20submissions%20for%3A&list={{hidden:list}}{{hidden:sep}}{{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}}&sep=%2C%20"
+        "redirect_url": "https://behaviorstudies.typeform.com/to/si7Re5?id={{hidden:id}}&msg=We%20have%20submissions%20for%3A&list={{hidden:list}}{{hidden:sep}}{{field:dog-name}}&sep=%2C%20"
       }
     },
     {
@@ -54,7 +54,7 @@
     {
       "id": "Z0JxySVpiVsG",
       "title": "What is the name of the dog you would like to submit a response for?",
-      "ref": "0e332c28-e4f6-4ed7-89d3-9f84eacf3251",
+      "ref": "dog-name",
       "properties": {
         "description": "{{hidden:msg}}{{hidden:list}}"
       },
@@ -65,7 +65,7 @@
     },
     {
       "id": "LSu1NqNeHyN3",
-      "title": "Is  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} 12 months or older?",
+      "title": "Is  {{field:dog-name}} 12 months or older?",
       "ref": "38e0f3f4-4041-4b80-ab4c-e3c1164cc56f",
       "validations": {
         "required": true
@@ -74,7 +74,7 @@
     },
     {
       "id": "DbjMjpkvzxuH",
-      "title": "If  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} is older than 12 months today, enter their age in years:\n(numeric input)",
+      "title": "If  {{field:dog-name}} is older than 12 months today, enter their age in years:\n(numeric input)",
       "ref": "787b2bbc-e785-44e7-baea-35a84734915b",
       "validations": {
         "required": true,
@@ -85,7 +85,7 @@
     },
     {
       "id": "dPkMF8WE3xGx",
-      "title": "Did you acquire {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} between 2 and 6 months?",
+      "title": "Did you acquire {{field:dog-name}} between 2 and 6 months?",
       "ref": "872fbcac-a8b1-4ea6-9121-50c643677916",
       "validations": {
         "required": true
@@ -94,7 +94,7 @@
     },
     {
       "id": "K9fcEwCRQp38",
-      "title": "Did  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} attend puppy training classes between 2 and 6 months?",
+      "title": "Did  {{field:dog-name}} attend puppy training classes between 2 and 6 months?",
       "ref": "d7ad8052-e93c-418e-ad3d-144d9a94763e",
       "properties": {
         "randomize": false,
@@ -126,7 +126,7 @@
     },
     {
       "id": "J72HAFFBcF0e",
-      "title": "What style of training was taught to you and{{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} during class?",
+      "title": "What style of training was taught to you and{{field:dog-name}} during class?",
       "ref": "0e19d812-a495-48f6-98a8-05fd36233bde",
       "properties": {
         "randomize": false,
@@ -200,7 +200,7 @@
     },
     {
       "id": "RS3kqjdD5Y3b",
-      "title": "Did {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} attend any training classes after 6 months of age?",
+      "title": "Did {{field:dog-name}} attend any training classes after 6 months of age?",
       "ref": "80e54971-f2a6-4e0c-bcc2-606fc2abea73",
       "validations": {
         "required": true
@@ -246,7 +246,7 @@
     },
     {
       "id": "fottQ7ZsYhiM",
-      "title": "Who trained you and  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}}?",
+      "title": "Who trained you and  {{field:dog-name}}?",
       "ref": "a0b35165-279e-426a-90d4-bee83a05bc0e",
       "properties": {
         "randomize": false,
@@ -283,7 +283,7 @@
     },
     {
       "id": "ZhW708OgBgtF",
-      "title": "At what age did you complete training {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}}?",
+      "title": "At what age did you complete training {{field:dog-name}}?",
       "ref": "b91a2f06-7d28-4f7c-8ee2-edb803050af2",
       "properties": {
         "randomize": false,
@@ -325,7 +325,7 @@
     },
     {
       "id": "kRdMF1uROg0c",
-      "title": "Does {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} display problem behaviors today?",
+      "title": "Does {{field:dog-name}} display problem behaviors today?",
       "ref": "ff095232-4ca2-4a0a-90f0-217dd7ad867c",
       "validations": {
         "required": true
@@ -334,7 +334,7 @@
     },
     {
       "id": "C5kDeGMIVtTv",
-      "title": "What behviors does  {{field:0e332c28-e4f6-4ed7-89d3-9f84eacf3251}} display?",
+      "title": "What behviors does  {{field:dog-name}} display?",
       "ref": "adadaca4-220f-4aa2-91a6-bf8697ef3128",
       "properties": {
         "randomize": false,
