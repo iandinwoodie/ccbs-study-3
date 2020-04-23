@@ -20,7 +20,7 @@
   },
   "thankyou_screens": [
     {
-      "ref": "31e58821-38e5-4aef-a581-6a7b50b3156c",
+      "ref": "thank_you_finished",
       "title": "Thank you for participating!",
       "properties": {
         "show_button": true,
@@ -31,14 +31,14 @@
       }
     },
     {
-      "ref": "90537705-6366-40d6-bad0-53da68e1ff29",
-      "title": "Your submission for {{field:dog-name}} has been saved!",
+      "ref": "thank_you_continue",
+      "title": "Your submission for {{field:dog_name}} has been saved!",
       "properties": {
         "show_button": true,
         "share_icons": false,
         "button_mode": "redirect",
         "button_text": "Continue",
-        "redirect_url": "https://behaviorstudies.typeform.com/to/si7Re5?id={{hidden:id}}&msg=We%20have%20submissions%20for%3A&list={{hidden:list}}{{hidden:sep}}{{field:dog-name}}&sep=%2C%20"
+        "redirect_url": "https://behaviorstudies.typeform.com/to/si7Re5?id={{hidden:id}}&msg=We%20have%20submissions%20for%3A&list={{hidden:list}}{{hidden:sep}}{{field:dog_name}}&sep=%2C%20"
       }
     },
     {
@@ -52,9 +52,8 @@
   ],
   "fields": [
     {
-      "id": "Z0JxySVpiVsG",
       "title": "What is the name of the dog you would like to submit a response for?",
-      "ref": "dog-name",
+      "ref": "dog_name",
       "properties": {
         "description": "{{hidden:msg}}{{hidden:list}}"
       },
@@ -64,18 +63,16 @@
       "type": "short_text"
     },
     {
-      "id": "LSu1NqNeHyN3",
-      "title": "Is  {{field:dog-name}} 12 months or older?",
-      "ref": "38e0f3f4-4041-4b80-ab4c-e3c1164cc56f",
+      "title": "Is {{field:dog_name}} 12 months or older?",
+      "ref": "is_at_least_1_yo",
       "validations": {
         "required": true
       },
       "type": "yes_no"
     },
     {
-      "id": "DbjMjpkvzxuH",
-      "title": "If  {{field:dog-name}} is older than 12 months today, enter their age in years:\n(numeric input)",
-      "ref": "787b2bbc-e785-44e7-baea-35a84734915b",
+      "title": "If {{field:dog_name}} is older than 12 months today, enter their age in years:\n(numeric input)",
+      "ref": "dog_age",
       "validations": {
         "required": true,
         "min_value": 1,
@@ -84,18 +81,16 @@
       "type": "number"
     },
     {
-      "id": "dPkMF8WE3xGx",
-      "title": "Did you acquire {{field:dog-name}} between 2 and 6 months?",
-      "ref": "872fbcac-a8b1-4ea6-9121-50c643677916",
+      "title": "Did you acquire {{field:dog_name}} between 2 and 6 months?",
+      "ref": "dog_age_acq",
       "validations": {
         "required": true
       },
       "type": "yes_no"
     },
     {
-      "id": "K9fcEwCRQp38",
-      "title": "Did  {{field:dog-name}} attend puppy training classes between 2 and 6 months?",
-      "ref": "d7ad8052-e93c-418e-ad3d-144d9a94763e",
+      "title": "Did  {{field:dog_name}} attend puppy training classes between 2 and 6 months?",
+      "ref": "puppy_training",
       "properties": {
         "randomize": false,
         "allow_multiple_selection": false,
@@ -103,19 +98,16 @@
         "vertical_alignment": true,
         "choices": [
           {
-            "id": "pwwpBxP4HDrD",
-            "ref": "dc3c5f2d-c9e4-4324-9c61-9aa382cc07b8",
+            "ref": "puppy_training_yes",
             "label": "Yes"
           },
           {
-            "id": "BI0lxcNsqBeI",
-            "ref": "06ccf16b-8320-48e0-838d-74fd3939ca0c",
+            "ref": "puppy_training_no",
             "label": "No"
           },
           {
-            "id": "R4DCEXOZQ0XN",
-            "ref": "c03c39d4-1db8-4e71-8a72-43b5dc91cd42",
-            "label": "I don\u2019t know"
+            "ref": "puppy_training_idk",
+            "label": "I dont know"
           }
         ]
       },
@@ -125,9 +117,8 @@
       "type": "multiple_choice"
     },
     {
-      "id": "J72HAFFBcF0e",
-      "title": "What style of training was taught to you and{{field:dog-name}} during class?",
-      "ref": "0e19d812-a495-48f6-98a8-05fd36233bde",
+      "title": "What style of training was taught to you and{{field:dog_name}} during class?",
+      "ref": "training_style",
       "properties": {
         "randomize": false,
         "allow_multiple_selection": false,
@@ -135,24 +126,20 @@
         "vertical_alignment": true,
         "choices": [
           {
-            "id": "fXNCiXH8Rwpd",
-            "ref": "dc3c5f2d-c9e4-4324-9c61-9aa382cc07b8",
+            "ref": "training_style_1",
             "label": "Reward based"
           },
           {
-            "id": "iJYdSimVwH9Y",
-            "ref": "06ccf16b-8320-48e0-838d-74fd3939ca0c",
+            "ref": "training_style_2",
             "label": "Discipline based"
           },
           {
-            "id": "kICXcG3lfny5",
-            "ref": "c03c39d4-1db8-4e71-8a72-43b5dc91cd42",
+            "ref": "training_style_3",
             "label": "Mixed balance of both reward and discipline"
           },
           {
-            "id": "isnV9XUGxYV2",
-            "ref": "31d7346a-68cf-4501-b0dd-1b76357318aa",
-            "label": "I don\u2019t know"
+            "ref": "training_style_4",
+            "label": "I dont know"
           }
         ]
       },
@@ -162,9 +149,8 @@
       "type": "multiple_choice"
     },
     {
-      "id": "UxDX035D4Nge",
       "title": "Where was puppy training offered?",
-      "ref": "4705a30f-325e-45b3-9ed6-c747d597c4f5",
+      "ref": "puppy_training_where",
       "properties": {
         "randomize": false,
         "allow_multiple_selection": false,
@@ -172,24 +158,20 @@
         "vertical_alignment": true,
         "choices": [
           {
-            "id": "pva5mHoyNkKN",
-            "ref": "dc3c5f2d-c9e4-4324-9c61-9aa382cc07b8",
+            "ref": "puppy_training_where_1",
             "label": "Myself/family member attended group classes"
           },
           {
-            "id": "U7GMKBQAtowm",
-            "ref": "06ccf16b-8320-48e0-838d-74fd3939ca0c",
+            "ref": "puppy_training_where_2",
             "label": "Hired private in-home trainer"
           },
           {
-            "id": "psQVVjkLpioE",
-            "ref": "c03c39d4-1db8-4e71-8a72-43b5dc91cd42",
+            "ref": "puppy_training_where_3",
             "label": "Sent to a professional training school/boot camp"
           },
           {
-            "id": "tQ4jVufLQnUp",
-            "ref": "f86012d7-f95c-43ac-8cee-17ebbf971086",
-            "label": "I don\u2019t know"
+            "ref": "puppy_training_where_4",
+            "label": "I dont know"
           }
         ]
       },
@@ -199,18 +181,16 @@
       "type": "multiple_choice"
     },
     {
-      "id": "RS3kqjdD5Y3b",
-      "title": "Did {{field:dog-name}} attend any training classes after 6 months of age?",
-      "ref": "80e54971-f2a6-4e0c-bcc2-606fc2abea73",
+      "title": "Did {{field:dog_name}} attend any training classes after 6 months of age?",
+      "ref": "later_training",
       "validations": {
         "required": true
       },
       "type": "yes_no"
     },
     {
-      "id": "vhbTgwg9ViUi",
       "title": "What style of training was used?",
-      "ref": "bb30e62a-77d7-4663-a6dd-aa3427728a47",
+      "ref": "later_training_style",
       "properties": {
         "randomize": false,
         "allow_multiple_selection": false,
@@ -218,24 +198,20 @@
         "vertical_alignment": true,
         "choices": [
           {
-            "id": "qcaCKXJ8BtpJ",
-            "ref": "250f9e56-7f05-429c-b26f-718927990e80",
+            "ref": "later_training_style_1",
             "label": "Reward based"
           },
           {
-            "id": "ZD9MogsAA6gW",
-            "ref": "626655b3-2cf0-444a-8c23-aa3cca901d77",
+            "ref": "later_training_style_2",
             "label": "Discipline based"
           },
           {
-            "id": "w2sit1N2sJN4",
-            "ref": "515dc985-8d49-4a94-9769-e0ba3a4cc393",
+            "ref": "later_training_style_3",
             "label": "Mixed balance of both reward and discipline"
           },
           {
-            "id": "PtxE7hAepwvF",
-            "ref": "6997bf1e-c59c-4eef-afff-884085dd5b83",
-            "label": "I don\u2019t know"
+            "ref": "later_training_style_4",
+            "label": "I dont know"
           }
         ]
       },
@@ -245,9 +221,8 @@
       "type": "multiple_choice"
     },
     {
-      "id": "fottQ7ZsYhiM",
-      "title": "Who trained you and  {{field:dog-name}}?",
-      "ref": "a0b35165-279e-426a-90d4-bee83a05bc0e",
+      "title": "Who trained you and {{field:dog_name}}?",
+      "ref": "trainer",
       "properties": {
         "randomize": false,
         "allow_multiple_selection": true,
@@ -255,24 +230,20 @@
         "vertical_alignment": true,
         "choices": [
           {
-            "id": "B3GUAsj85wyx",
-            "ref": "23de54ff-5207-42e5-9e6a-94d9a5952b6c",
+            "ref": "trainer_1",
             "label": "Myself/family member attended group classes"
           },
           {
-            "id": "maabqrxNkyco",
-            "ref": "c0d85953-5e3b-4e11-9c3d-b27be9892d70",
+            "ref": "trainer_2",
             "label": "Hired in home private trainer"
           },
           {
-            "id": "YGHhuvgC4ejQ",
-            "ref": "cb0f3d49-d756-4b99-94cc-759a1fa70921",
+            "ref": "trainer_3",
             "label": "Sent to professional training school/boot camp"
           },
           {
-            "id": "TPbGpiz9NS33",
-            "ref": "c8991174-5dc2-435c-a792-a66f0c67c162",
-            "label": "I don\u2019t know"
+            "ref": "trainer_4",
+            "label": "I dont know"
           }
         ]
       },
@@ -282,9 +253,8 @@
       "type": "multiple_choice"
     },
     {
-      "id": "ZhW708OgBgtF",
-      "title": "At what age did you complete training {{field:dog-name}}?",
-      "ref": "b91a2f06-7d28-4f7c-8ee2-edb803050af2",
+      "title": "At what age did you complete training {{field:dog_name}}?",
+      "ref": "age_training_complete",
       "properties": {
         "randomize": false,
         "allow_multiple_selection": true,
@@ -292,29 +262,24 @@
         "vertical_alignment": true,
         "choices": [
           {
-            "id": "iNvRtC5vY5HU",
-            "ref": "1cd3e3a5-b1d8-4c27-a2fa-9fa2da705bf3",
+            "ref": "age_training_complete_1",
             "label": "6 to 18 months (adolescence)"
           },
           {
-            "id": "W9Musi3Kzr6I",
-            "ref": "16f62182-6668-4845-b726-64c549bfd5f9",
+            "ref": "age_training_complete_2",
             "label": "24 months (adult)"
           },
           {
-            "id": "qHzh4HE247Iw",
-            "ref": "0a50feeb-0c0d-4be1-89b7-7681382df7da",
+            "ref": "age_training_complete_3",
             "label": "Continue to attend classes periodically (nose work, agility, trick training, etc.)"
           },
           {
-            "id": "pabDyGambKe4",
-            "ref": "eb181fdb-c6df-461d-8eec-43fb9adb0d4a",
+            "ref": "age_training_complete_4",
             "label": "Continue to practice and use training skills in home"
           },
           {
-            "id": "r2hP6azRTcrL",
-            "ref": "51fbb218-fef8-4242-946e-8c23fd3e0218",
-            "label": "I don\u2019t remember"
+            "ref": "age_training_complete_5",
+            "label": "I dont remember"
           }
         ]
       },
@@ -324,18 +289,24 @@
       "type": "multiple_choice"
     },
     {
-      "id": "kRdMF1uROg0c",
-      "title": "Does {{field:dog-name}} display problem behaviors today?",
-      "ref": "ff095232-4ca2-4a0a-90f0-217dd7ad867c",
+      "title": "Does {{field:dog_name}} display problem behaviors today?",
+      "ref": "has_behavior_problems",
       "validations": {
         "required": true
       },
       "type": "yes_no"
     },
     {
-      "id": "C5kDeGMIVtTv",
-      "title": "What behviors does  {{field:dog-name}} display?",
-      "ref": "adadaca4-220f-4aa2-91a6-bf8697ef3128",
+      "title": "Is there at least one situation in which you {{field:dog_name}} behaves aggressively?",
+      "ref": "aggression",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "Who or what has {{field:dog_name}} acted aggressively toward?",
+      "ref": "aggression_type",
       "properties": {
         "randomize": false,
         "allow_multiple_selection": true,
@@ -343,64 +314,52 @@
         "vertical_alignment": true,
         "choices": [
           {
-            "id": "adtFXIvKiRPq",
-            "ref": "dc7952e4-ee80-465e-988e-99cc4b5d366d",
-            "label": "Attention seeking (i.e. barks at you)"
+            "ref": "aggression_type_1",
+            "label": "Familiar people in the home"
           },
           {
-            "id": "IH7xLnaw58Th",
-            "ref": "597e1af8-1bac-4c1f-966b-abed8c47d635",
-            "label": "Pulls on leash while walking"
+            "ref": "aggression_type_2",
+            "label": "Familiar people away from the home"
           },
           {
-            "id": "p1Oxn14BhYSE",
-            "ref": "45c193b0-688d-4fdc-bfba-1eafcede544d",
-            "label": "Follows/shadows me before leaving home"
+            "ref": "aggression_type_3",
+            "label": "Strangers visiting the home"
           },
           {
-            "id": "G4hyl4YznEGo",
-            "ref": "ba1b5550-96a4-4903-89c8-35c1f1fac6b5",
-            "label": "Destructive inside the home"
+            "ref": "aggression_type_4",
+            "label": "Strangers away from the home"
           },
           {
-            "id": "PgxPhiVIFSgi",
-            "ref": "c1c3ba6a-1c10-4e0b-897f-a3e564a54c59",
-            "label": "Fear of known people (family members)"
+            "ref": "aggression_type_5",
+            "label": "Familiar dogs in the home"
           },
           {
-            "id": "wEKq0Genxibw",
-            "ref": "c25a0e97-6df4-4d55-869b-9ba20a7e0f79",
-            "label": "Fear of strange people"
+            "ref": "aggression_type_6",
+            "label": "Familiar dogs away from the home"
           },
           {
-            "id": "AXfrgtYVrszX",
-            "ref": "2330ee6f-9736-4625-a3e9-d5865baf9359",
-            "label": "Fear of noise"
+            "ref": "aggression_type_7",
+            "label": "Unfamiliar dogs in the home"
           },
           {
-            "id": "JeOVzFhpxQyN",
-            "ref": "a3cfed2c-0aa7-4f14-ac77-320c4b32d209",
-            "label": "Fear of being alone"
+            "ref": "aggression_type_8",
+            "label": "Unfamiliar dogs away from the home"
           },
           {
-            "id": "XjYLwDe6KO7c",
-            "ref": "9a0363db-f43d-424d-9572-b1e95ee064fa",
-            "label": "Aggression toward known people (family member)"
+            "ref": "aggression_type_9",
+            "label": "Animals other than dogs"
           },
           {
-            "id": "wJR9iWAtWmJq",
-            "ref": "63d629e3-3031-4586-a08c-b58246a76915",
-            "label": "Aggression toward strange people"
+            "ref": "aggression_type_10",
+            "label": "Veterinarians"
           },
           {
-            "id": "OPZ6ubKhHDFf",
-            "ref": "bf0005bd-be53-4bda-908d-268e1112d174",
-            "label": "Aggression toward known dogs"
+            "ref": "aggression_type_11",
+            "label": "Groomers"
           },
           {
-            "id": "o0ars9OVlSvA",
-            "ref": "0095ffd8-f68e-4306-84c6-8b9c51bb00c4",
-            "label": "Aggression toward strange dogs"
+            "ref": "aggression_type_12",
+            "label": "Trainers"
           }
         ]
       },
@@ -410,9 +369,544 @@
       "type": "multiple_choice"
     },
     {
-      "id": "Hojr3HJQIwby",
+      "title": "Is there at least one situation in which {{field:dog_name}} is fearful or anxious?",
+      "ref": "fear_anxiety",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "What sort of fears and/or anxiety has {{field:dog_name}} had?",
+      "ref": "fear_anxiety_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "fear_anxiety_type_1",
+            "label": "Fear of crowds"
+          },
+          {
+            "ref": "fear_anxiety_type_2",
+            "label": "Fear of veterinary visits"
+          },
+          {
+            "ref": "fear_anxiety_type_3",
+            "label": "Fear of noises"
+          },
+          {
+            "ref": "fear_anxiety_type_4",
+            "label": "Fear of thunderstorms"
+          },
+          {
+            "ref": "fear_anxiety_type_5",
+            "label": "Fear of other dogs"
+          },
+          {
+            "ref": "fear_anxiety_type_6",
+            "label": "Fear of animals other than dogs"
+          },
+          {
+            "ref": "fear_anxiety_type_7",
+            "label": "Separation anxiety"
+          },
+          {
+            "ref": "fear_anxiety_type_8",
+            "label": "Travel anxiety"
+          },
+          {
+            "ref": "fear_anxiety_type_9",
+            "label": "Generalized anxiety"
+          },
+          {
+            "ref": "fear_anxiety_type_10",
+            "label": "Post-traumatic Stress Disorder (PTSD)"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Do you consider {{field:dog_name}} to have a problem with jumping up on people?",
+      "ref": "jumping",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "Who does {{field:dog_name}} jumped up on?",
+      "ref": "jumping_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "jumping_type_1",
+            "label": "Owners"
+          },
+          {
+            "ref": "jumping_type_2",
+            "label": "Familiar people"
+          },
+          {
+            "ref": "jumping_type_3",
+            "label": "Stangers"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Does {{field:dog_name}} bark excessively?",
+      "ref": "barking",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "When has {{field:dog_name}} excessively barked?",
+      "ref": "dog_excessive_barking_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "barking_type_1",
+            "label": "At triggers (inside)"
+          },
+          {
+            "ref": "barking_type_2",
+            "label": "At triggers (outside)"
+          },
+          {
+            "ref": "barking_type_3",
+            "label": "Owners are present"
+          },
+          {
+            "ref": "barking_type_4",
+            "label": "Owners are away"
+          },
+          {
+            "ref": "barking_type_5",
+            "label": "To get attention"
+          },
+          {
+            "ref": "barking_type_6",
+            "label": "During car rides"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Has {{field:dog_name}} ever eaten feces?",
+      "ref": "coprophagia",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "What type of feces has {{field:dog_name}} eaten?",
+      "ref": "coprophagia_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "coprophagia_type_1",
+            "label": "Their own feces"
+          },
+          {
+            "ref": "coprophagia_type_2",
+            "label": "Dog feces other than their own"
+          },
+          {
+            "ref": "coprophagia_type_3",
+            "label": "The feces of other animals"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Has {{field:dog_name}} ever had any repetitive behaviors?",
+      "ref": "compulsion",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "What sort of repetitive behaviors have you seen with {{field:dog_name}}?",
+      "ref": "compulsion_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "compulsion_type_1",
+            "label": "Licking of the wrist/hock"
+          },
+          {
+            "ref": "compulsion_type_2",
+            "label": "Tail chasing"
+          },
+          {
+            "ref": "compulsion_type_3",
+            "label": "Digging in the yard"
+          },
+          {
+            "ref": "compulsion_type_4",
+            "label": "Tennis ball fetish"
+          },
+          {
+            "ref": "compulsion_type_5",
+            "label": "Spinning"
+          },
+          {
+            "ref": "compulsion_type_6",
+            "label": "Nail biting"
+          },
+          {
+            "ref": "compulsion_type_7",
+            "label": "Shadow/light chasing"
+          },
+          {
+            "ref": "compulsion_type_8",
+            "label": "Sucking flank regions/blankets"
+          },
+          {
+            "ref": "compulsion_type_9",
+            "label": "Running in geometric patterns"
+          },
+          {
+            "ref": "compulsion_type_10",
+            "label": "Collecting/arranging objects"
+          },
+          {
+            "ref": "compulsion_type_11",
+            "label": "Stone/rock chewing"
+          },
+          {
+            "ref": "compulsion_type_12",
+            "label": "Fly snapping (when no flies are around)"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Have you ever had a problem with {{field:dog_name}} soiling in the house?",
+      "ref": "soiled",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "When has {{field:dog_name}} soiled in the house?",
+      "ref": "soiled_when",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "soiled_when_1",
+            "label": "Owners are present"
+          },
+          {
+            "ref": "soiled_when_2",
+            "label": "Owners are away"
+          },
+          {
+            "ref": "soiled_when_3",
+            "label": "Exited/overwhelmed"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "How has {{field:dog_name}} soiled in the house?",
+      "ref": "soiled_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "soiled_type_1",
+            "label": "Feces"
+          },
+          {
+            "ref": "soiled_type_2",
+            "label": "Urine"
+          },
+          {
+            "ref": "soiled_type_3",
+            "label": "Both feces and urine"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Where has {{field:dog_name}} soiled in the house?",
+      "ref": "soiled_where",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "soiled_where_1",
+            "label": "Specific locations"
+          },
+          {
+            "ref": "soiled_where_2",
+            "label": "Anywhere"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Has {{field:dog_name}} ever rolled in repulsive material?",
+      "ref": "rolling",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "In what repulsive material has {{field:dog_name}} rolled?",
+      "ref": "rolling_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "rolling_type_1",
+            "label": "Urine"
+          },
+          {
+            "ref": "rolling_type_2",
+            "label": "Feces"
+          },
+          {
+            "ref": "rolling_type_3",
+            "label": "Garbage"
+          },
+          {
+            "ref": "rolling_type_4",
+            "label": "Dead stuff"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Do you consider{{field:dog_name}} to be overactive/hyperactive?",
+      "ref": "hyperactivity",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "In what ways has {{field:dog_name}} been overactive/hyperactive?",
+      "ref": "hyperactivity_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "hyperactivity_type_1",
+            "label": "Difficulty settling"
+          },
+          {
+            "ref": "hyperactivity_type_2",
+            "label": "Constant moving/jumping"
+          },
+          {
+            "ref": "hyperactivity_type_3",
+            "label": "Impulsiveness"
+          },
+          {
+            "ref": "hyperactivity_type_4",
+            "label": "Easily distracted"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Has {{field:dog_name}} ever exhibited destructive behavior in the home (other than puppy chewing behavior)?",
+      "ref": "destruction",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "When has {{field:dog_name}} been destructive?",
+      "ref": "destruction_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "destruction_type_1",
+            "label": "Owner is present"
+          },
+          {
+            "ref": "destruction_type_2",
+            "label": "Owner is away"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Has {{field:dog_name}} ever run away/escaped?",
+      "ref": "escaping",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "Which of the following describes how {{field:dog_name}} has run away/escaped?",
+      "ref": "escaping_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "escaping_type_1",
+            "label": "Escapes from home"
+          },
+          {
+            "ref": "escaping_type_2",
+            "label": "Escaped when out"
+          },
+          {
+            "ref": "escaping_type_3",
+            "label": "Escapes from confinement"
+          },
+          {
+            "ref": "escaping_type_4",
+            "label": "Returns home after escape"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Have you ever had a problem with {{field:dog_name}} mounting/humping?",
+      "ref": "mounting",
+      "validations": {
+        "required": true
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "Who or what has {{field:dog_name}} mounted/humped?",
+      "ref": "mounting_type",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "mounting_type_1",
+            "label": "People"
+          },
+          {
+            "ref": "mounting_type_2",
+            "label": "Familiar dogs"
+          },
+          {
+            "ref": "mounting_type_3",
+            "label": "Unfamiliar dogs"
+          },
+          {
+            "ref": "mounting_type_4",
+            "label": "Inanimate objects"
+          }
+        ]
+      },
+      "validations": {
+        "required": true
+      },
+      "type": "multiple_choice"
+    },
+    {
       "title": "Would you like to enter information for another dog you own?",
-      "ref": "abe8b15c-81e1-4333-b723-4cc7af72ce25",
+      "ref": "another_dog",
       "validations": {
         "required": false
       },
@@ -428,14 +922,14 @@
   "logic": [
     {
       "type": "field",
-      "ref": "abe8b15c-81e1-4333-b723-4cc7af72ce25",
+      "ref": "another_dog",
       "actions": [
         {
           "action": "jump",
           "details": {
             "to": {
               "type": "thankyou",
-              "value": "90537705-6366-40d6-bad0-53da68e1ff29"
+              "value": "thank_you_continue"
             }
           },
           "condition": {
@@ -443,142 +937,13 @@
             "vars": [
               {
                 "type": "field",
-                "value": "abe8b15c-81e1-4333-b723-4cc7af72ce25"
+                "value": "another_dog"
               },
               {
                 "type": "constant",
                 "value": true
               }
             ]
-          }
-        }
-      ]
-    },
-    {
-      "type": "field",
-      "ref": "d7ad8052-e93c-418e-ad3d-144d9a94763e",
-      "actions": [
-        {
-          "action": "jump",
-          "details": {
-            "to": {
-              "type": "field",
-              "value": "80e54971-f2a6-4e0c-bcc2-606fc2abea73"
-            }
-          },
-          "condition": {
-            "op": "is",
-            "vars": [
-              {
-                "type": "field",
-                "value": "d7ad8052-e93c-418e-ad3d-144d9a94763e"
-              },
-              {
-                "type": "choice",
-                "value": "06ccf16b-8320-48e0-838d-74fd3939ca0c"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "type": "field",
-      "ref": "38e0f3f4-4041-4b80-ab4c-e3c1164cc56f",
-      "actions": [
-        {
-          "action": "jump",
-          "details": {
-            "to": {
-              "type": "field",
-              "value": "787b2bbc-e785-44e7-baea-35a84734915b"
-            }
-          },
-          "condition": {
-            "op": "is",
-            "vars": [
-              {
-                "type": "field",
-                "value": "38e0f3f4-4041-4b80-ab4c-e3c1164cc56f"
-              },
-              {
-                "type": "constant",
-                "value": true
-              }
-            ]
-          }
-        },
-        {
-          "action": "jump",
-          "details": {
-            "to": {
-              "type": "field",
-              "value": "872fbcac-a8b1-4ea6-9121-50c643677916"
-            }
-          },
-          "condition": {
-            "op": "always",
-            "vars": []
-          }
-        }
-      ]
-    },
-    {
-      "type": "field",
-      "ref": "80e54971-f2a6-4e0c-bcc2-606fc2abea73",
-      "actions": [
-        {
-          "action": "jump",
-          "details": {
-            "to": {
-              "type": "field",
-              "value": "bb30e62a-77d7-4663-a6dd-aa3427728a47"
-            }
-          },
-          "condition": {
-            "op": "is",
-            "vars": [
-              {
-                "type": "field",
-                "value": "80e54971-f2a6-4e0c-bcc2-606fc2abea73"
-              },
-              {
-                "type": "constant",
-                "value": true
-              }
-            ]
-          }
-        },
-        {
-          "action": "jump",
-          "details": {
-            "to": {
-              "type": "field",
-              "value": "ff095232-4ca2-4a0a-90f0-217dd7ad867c"
-            }
-          },
-          "condition": {
-            "op": "always",
-            "vars": []
-          }
-        }
-      ]
-    },
-    {
-      "type": "field",
-      "ref": "ff095232-4ca2-4a0a-90f0-217dd7ad867c",
-      "actions": [
-        {
-          "action": "jump",
-          "details": {
-            "to": {
-              "type": "field",
-              "value": "abe8b15c-81e1-4333-b723-4cc7af72ce25"
-            }
-          },
-          "condition": {
-            "op": "always",
-            "vars": []
           }
         }
       ]
