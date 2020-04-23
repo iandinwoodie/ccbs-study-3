@@ -36,8 +36,6 @@ def main():
     elif args['push']:
         with open(form.filepath, 'r') as fin:
             form.contents = json.load(fin)
-        response = typeform.forms.update(form.id, form.contents)
-        if not response == form.contents:
-            raise Exception('The response does not match the requested push.')
+        typeform.forms.update(form.id, form.contents)
     else:
         raise Exception('Unexpected arguments were tendered.')
