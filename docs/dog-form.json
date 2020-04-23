@@ -71,12 +71,22 @@
       "type": "yes_no"
     },
     {
-      "title": "If {{field:dog_name}} is older than 12 months today, enter their age in years:\n(numeric input)",
-      "ref": "dog_age",
+      "title": "Enter their age in years:",
+      "ref": "dog_age_years",
       "validations": {
         "required": true,
         "min_value": 1,
         "max_value": 40
+      },
+      "type": "number"
+    },
+    {
+      "title": "Enter their age in months:",
+      "ref": "dog_age_months",
+      "validations": {
+        "required": true,
+        "min_value": 1,
+        "max_value": 11
       },
       "type": "number"
     },
@@ -107,7 +117,7 @@
           },
           {
             "ref": "puppy_training_idk",
-            "label": "I dont know"
+            "label": "I don't know"
           }
         ]
       },
@@ -139,7 +149,7 @@
           },
           {
             "ref": "training_style_4",
-            "label": "I dont know"
+            "label": "I don't know"
           }
         ]
       },
@@ -171,7 +181,7 @@
           },
           {
             "ref": "puppy_training_where_4",
-            "label": "I dont know"
+            "label": "I don't know"
           }
         ]
       },
@@ -211,7 +221,7 @@
           },
           {
             "ref": "later_training_style_4",
-            "label": "I dont know"
+            "label": "I don't know"
           }
         ]
       },
@@ -243,7 +253,7 @@
           },
           {
             "ref": "trainer_4",
-            "label": "I dont know"
+            "label": "I don't know"
           }
         ]
       },
@@ -279,7 +289,7 @@
           },
           {
             "ref": "age_training_complete_5",
-            "label": "I dont remember"
+            "label": "I don't remember"
           }
         ]
       },
@@ -944,6 +954,170 @@
                 "value": true
               }
             ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "ref": "is_at_least_1_yo",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "dog_age_years"
+            }
+          },
+          "condition": {
+            "op": "is",
+            "vars": [
+              {
+                "type": "field",
+                "value": "is_at_least_1_yo"
+              },
+              {
+                "type": "constant",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "dog_age_months"
+            }
+          },
+          "condition": {
+            "op": "always",
+            "vars": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "ref": "puppy_training",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "training_style"
+            }
+          },
+          "condition": {
+            "op": "is",
+            "vars": [
+              {
+                "type": "field",
+                "value": "puppy_training"
+              },
+              {
+                "type": "choice",
+                "value": "puppy_training_yes"
+              }
+            ]
+          }
+        },
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "later_training"
+            }
+          },
+          "condition": {
+            "op": "always",
+            "vars": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "ref": "later_training",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "later_training_style"
+            }
+          },
+          "condition": {
+            "op": "is",
+            "vars": [
+              {
+                "type": "field",
+                "value": "later_training"
+              },
+              {
+                "type": "constant",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "has_behavior_problems"
+            }
+          },
+          "condition": {
+            "op": "always",
+            "vars": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "ref": "has_behavior_problems",
+      "actions": [
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "aggression"
+            }
+          },
+          "condition": {
+            "op": "is",
+            "vars": [
+              {
+                "type": "field",
+                "value": "has_behavior_problems"
+              },
+              {
+                "type": "constant",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "action": "jump",
+          "details": {
+            "to": {
+              "type": "field",
+              "value": "another_dog"
+            }
+          },
+          "condition": {
+            "op": "always",
+            "vars": []
           }
         }
       ]
