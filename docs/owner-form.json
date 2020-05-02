@@ -52,7 +52,6 @@
   ],
   "fields": [
     {
-      "id": "TxMMStLIHYne",
       "title": "First, let\u2019s start with some information about you",
       "ref": "f2752fa8-4007-4d11-9f9e-420f774b5622",
       "properties": {
@@ -60,7 +59,6 @@
         "button_text": "Continue",
         "fields": [
           {
-            "id": "oJMcP4BoXnlr",
             "title": "What is your email?",
             "ref": "e952dc38-02ef-483c-8331-0cbb083a54ba",
             "properties": {
@@ -72,35 +70,20 @@
             "type": "email"
           },
           {
-            "id": "oZPujjGOGtKp",
-            "title": "What is your postal code (zip code)?",
-            "ref": "e46b4e73-089c-4fcc-83ce-6db7e1a9cc3b",
-            "properties": {
-              "description": "We collect postal codes so that we may determine if our results apply regionally or globally."
-            },
-            "validations": {
-              "required": false
-            },
-            "type": "short_text"
-          },
-          {
-            "id": "KeVopP8xqDDn",
             "title": "What is your gender?",
             "ref": "82d7ec10-534c-4b86-b4c0-992de0fb5c16",
             "properties": {
-              "description": "We collect dog owner gender so that we may detect its role in the trends we discover.",
+              "description": "We collect dog owner gender so that we may detect its role in the trends we discover.\n\n(This question is optional)",
               "randomize": false,
               "allow_multiple_selection": false,
               "allow_other_choice": false,
               "vertical_alignment": true,
               "choices": [
                 {
-                  "id": "iy8VR9dAgVOQ",
                   "ref": "f3f38ffc-3171-4224-93ea-5570cedfc147",
                   "label": "Female"
                 },
                 {
-                  "id": "dK5A72RkNCPe",
                   "ref": "650e7e16-2823-4b72-8924-4dd442279c1a",
                   "label": "Male"
                 }
@@ -112,11 +95,10 @@
             "type": "multiple_choice"
           },
           {
-            "id": "QOIGM5AcrXpJ",
             "title": "What is your age?",
             "ref": "3805f120-3234-4391-a099-ee175a30d959",
             "properties": {
-              "description": "We collect dog owner age so that we can determine if it plays a role in the canine behaviors we are studying."
+              "description": "We collect dog owner age so that we can determine if it plays a role in the canine behaviors we are studying.\n\n(This question is optional)\n"
             },
             "validations": {
               "required": false,
