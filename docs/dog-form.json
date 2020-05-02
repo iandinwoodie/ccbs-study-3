@@ -327,7 +327,7 @@
       "type": "yes_no"
     },
     {
-      "title": "Is there at least one situation in which you {{field:dog_name}} behaves aggressively?",
+      "title": "Is there at least one situation in which {{field:dog_name}} behaves aggressively?",
       "ref": "aggression",
       "validations": {
         "required": true
