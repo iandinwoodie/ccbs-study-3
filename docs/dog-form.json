@@ -38,7 +38,7 @@
         "share_icons": false,
         "button_mode": "redirect",
         "button_text": "Continue",
-        "redirect_url": "https://behaviorstudies.typeform.com/to/si7Re5?id={{hidden:id}}&msg=We%20have%20submissions%20for%3A&list={{hidden:list}}{{hidden:sep}}{{field:dog_name}}&sep=%2C%20"
+        "redirect_url": "https://behaviorstudies.typeform.com/to/b6s4oE?id={{hidden:id}}&msg=We%20have%20submissions%20for%3A&list={{hidden:list}}{{hidden:sep}}{{field:dog_name}}&sep=%2C%20"
       }
     },
     {
