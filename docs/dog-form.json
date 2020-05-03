@@ -99,7 +99,7 @@
       "type": "yes_no"
     },
     {
-      "title": "Did  {{field:dog_name}} attend puppy training classes between 2 and 6 months?",
+      "title": "Did {{field:dog_name}} attend puppy training classes between 2 and 6 months?",
       "ref": "puppy_training",
       "properties": {
         "randomize": false,
@@ -127,7 +127,7 @@
       "type": "multiple_choice"
     },
     {
-      "title": "What style of training was taught to you and{{field:dog_name}} during class?",
+      "title": "What style of training was taught to you and {{field:dog_name}} during class?",
       "ref": "training_style",
       "properties": {
         "randomize": false,
