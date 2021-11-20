@@ -1,0 +1,97 @@
+---
+title: "Building Tidy Data"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+# Overview
+
+This notebook serves as reference for the tidying procedures used to prepare the
+study data for analysis.
+
+# Forming the Data Frame
+
+## Loading the Raw Data
+
+Load and verify the raw owner data.
+
+```{r}
+df_owners <- read.csv('../data/raw-owners.csv', header=TRUE, skipNul=TRUE)
+names(df_owners)[names(df_owners) == 'What.is.your.email.'] <- 'owner-id'
+stopifnot(identical(dim(df_owners)+0, c(717, 6)))
+str(df_owners, list.len=5)
+```
+
+Load and verify the raw dog data.
+
+```{r}
+df_dogs <- read.csv('../data/raw-dogs.csv', header=TRUE, skipNul=TRUE)
+names(df_dogs)[names(df_dogs) == 'id'] <- 'owner-id'
+stopifnot(identical(dim(df_dogs)+0, c(969, 45)))
+str(df_dogs, list.len=5)
+```
+
+## Forming Complete Responses
+
+```{r}
+# Merge the raw owners and dogs data on the owner id.
+df <- merge(df_owners, df_dogs, by='owner-id', all=TRUE)
+str(df)
+```
+
+## Applying Readable Column Names
+
+```{r}
+# iandinwoodie TODO: Generate a readable column names file.
+#colnames(df) <- readr::read_lines('../references/readable-column-names.csv')
+str(df)
+```
+
+# Dropping Unnecessary Columns
+
+We use the following section to drop unnecessary columns from the data frame.
+
+```{r}
+# TODO
+```
+
+# Adjusting Data Types
+
+We use the following sections to adjust field types in the data frame.
+
+```{r}
+# TODO
+```
+
+# Additional Data Cleaning
+
+We use the following sections to carry out additional tidying procedures.
+
+```{r}
+# TODO
+```
+
+# Final Summary
+
+Take a last look at the data before saving it to disk.
+
+```{r}
+dim(df)
+summary(df)
+```
+
+# Saving the Tidy Data
+
+Save the data to a file in the data directory using RDS format so that the data
+types are stored and the resulting file is compressed.
+
+```{r}
+saveRDS(df, '../data/tidy.Rds')
+```
