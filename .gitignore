@@ -2,3 +2,4 @@
 .venv
 *.pyc
 .Rproj.user
+*.Rds
