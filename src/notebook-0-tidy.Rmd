@@ -24,26 +24,27 @@ Load and verify the raw owner data.
 
 ```{r}
 df_owners <- read.csv('../data/raw-owners.csv', header=TRUE, skipNul=TRUE)
-names(df_owners)[names(df_owners) == 'What.is.your.email.'] <- 'owner-id'
+names(df_owners)[names(df_owners) == 'What.is.your.email.'] <- 'owner_id'
 stopifnot(identical(dim(df_owners)+0, c(717, 6)))
-str(df_owners, list.len=5)
+str(df_owners)
 ```
 
 Load and verify the raw dog data.
 
 ```{r}
 df_dogs <- read.csv('../data/raw-dogs.csv', header=TRUE, skipNul=TRUE)
-names(df_dogs)[names(df_dogs) == 'id'] <- 'owner-id'
+names(df_dogs)[names(df_dogs) == 'id'] <- 'owner_id'
 stopifnot(identical(dim(df_dogs)+0, c(969, 45)))
-str(df_dogs, list.len=5)
+str(df_dogs[, c(1:3, 43:45)])
 ```
 
 ## Forming Complete Responses
 
 ```{r}
 # Merge the raw owners and dogs data on the owner id.
-df <- merge(df_owners, df_dogs, by='owner-id', all=TRUE)
-str(df)
+df <- merge(df_owners, df_dogs, by='owner_id', all=TRUE)
+stopifnot(identical(dim(df)+0, c(1181, 50)))
+str(df[, c(1:3, 47:50)])
 ```
 
 ## Applying Readable Column Names
