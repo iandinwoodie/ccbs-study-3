@@ -22,6 +22,7 @@ xyz456 | answer-1 | ... | answer-n
 ### Raw Dog Data
 
 dog-name | field-1 | ... | field-n | owner-id
+--- | --- | --- | --- | ---
 mark | answer-1 | ... | answer-n | abc123
 kevin | answer-1 | ... | answer-n | abc123
 dan | answer-1 | ... | answer-n | xyz456
