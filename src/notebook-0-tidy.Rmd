@@ -49,8 +49,9 @@ str(df)
 ## Applying Readable Column Names
 
 ```{r}
-# iandinwoodie TODO: Generate a readable column names file.
-#colnames(df) <- readr::read_lines('../references/readable-column-names.csv')
+write.table(colnames(df), '../docs/readable-column-names.csv', row.names=FALSE,
+            col.names=FALSE)
+colnames(df) <- readr::read_lines('../docs/readable-column-names.csv')
 str(df)
 ```
 
