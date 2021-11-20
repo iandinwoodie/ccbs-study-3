@@ -1,0 +1,32 @@
+---
+title: "Exploratory Data Analysis"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+# Overview
+
+This notebook catalogs the exploratory data analysis undertaken for this
+project.
+
+# Loading the Data
+
+Load the tidy data set into memory. If it does not exist, then run the notebook
+that builds it.
+
+```{r}
+tidy_data_filepath <- '../data/tidy.Rds'
+if (!file.exists(tidy_data_filepath)) {
+  rmarkdown::render('./notebook-0-tidy.Rmd')
+}
+df <- readRDS(tidy_data_filepath)
+stopifnot(identical(dim(df)+0, c(1181, 41)))
+str(df)
+```
