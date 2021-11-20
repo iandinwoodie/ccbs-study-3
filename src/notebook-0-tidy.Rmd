@@ -59,7 +59,11 @@ str(df)
 We use the following section to drop unnecessary columns from the data frame.
 
 ```{r}
-# TODO
+df <- df %>%
+  select(-(owner_referral_source:owner_token)) %>%
+  select(-(owner_has_another_dog_to_enter:dog_token))
+stopifnot(identical(dim(df)+0, c(1181, 41)))
+str(df)
 ```
 
 # Adjusting Data Types
