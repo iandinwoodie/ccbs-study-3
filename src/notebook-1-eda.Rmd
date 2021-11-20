@@ -18,13 +18,15 @@ project.
 
 # Loading the Data
 
-If the tidy dataset does not exist, then build it.
+Load the tidy data set into memory. If it does not exist, then run the notebook
+that builds it.
 
 ```{r}
 tidy_data_filepath <- '../data/tidy.Rds'
-df_owners <- read.csv('../data/raw-owners.csv', header=TRUE, skipNul=TRUE)
-names(df_owners)[names(df_owners) == 'What.is.your.email.'] <- 'owner_id'
-stopifnot(identical(dim(df_owners)+0, c(717, 6)))
-str(df_owners)
+if (!file.exists(tidy_data_filepath)) {
+  rmarkdown::render('./notebook-0-tidy.Rmd')
+}
+df <- readRDS(tidy_data_filepath)
+stopifnot(identical(dim(df)+0, c(1181, 41)))
+str(df)
 ```
-
