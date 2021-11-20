@@ -50,8 +50,6 @@ str(df[, c(1:3, 47:50)])
 ## Applying Readable Column Names
 
 ```{r}
-write.table(colnames(df), '../docs/readable-column-names.csv', row.names=FALSE,
-            col.names=FALSE)
 colnames(df) <- readr::read_lines('../docs/readable-column-names.csv')
 str(df)
 ```
