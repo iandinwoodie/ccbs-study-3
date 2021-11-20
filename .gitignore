@@ -3,3 +3,4 @@
 *.pyc
 .Rproj.user
 *.Rds
+.Rhistory
