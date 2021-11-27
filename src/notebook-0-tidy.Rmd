@@ -72,6 +72,63 @@ We use the following sections to adjust field types in the data frame.
 
 ```{r}
 # TODO
+#copy data frame
+df_adj_dtypes <- df
+
+# replace blank fields with "NA" ( = no answer / missing values)
+#df_adj_dtypes[df_adj_dtypes==""] <- NA
+
+# change comma-separated lists into separate columns
+
+# separate each answer into its own column.
+
+#dog_adolescent_or_adult_training_trainer
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(trainer_group_classes = as.factor(ifelse(
+    dog_adolescent_or_adult_training_trainer == "" | 
+      dog_adolescent_or_adult_training_trainer == "I don't know", NA, ifelse(
+      grepl('Myself/family member attended group classes', 
+            dog_adolescent_or_adult_training_trainer), TRUE, FALSE)))) %>%
+  mutate(trainer_boot_camp = as.factor(ifelse(
+    dog_adolescent_or_adult_training_trainer == "" | 
+      dog_adolescent_or_adult_training_trainer == "I don't know", NA, ifelse(
+      grepl('Sent to professional training school/boot camp', 
+            dog_adolescent_or_adult_training_trainer), TRUE, FALSE)))) %>%
+  mutate(trainer_home_private = as.factor(ifelse(
+    dog_adolescent_or_adult_training_trainer == "" | 
+      dog_adolescent_or_adult_training_trainer == "I don't know", NA, ifelse(
+      grepl('Hired in home private trainer', dog_adolescent_or_adult_training_trainer), TRUE, FALSE))))
+
+
+#dog_adolescent_or_adult_training_completion_age
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(training_complete_age_6_to_18mo = as.factor(ifelse(
+    dog_adolescent_or_adult_training_completion_age == "" | 
+      dog_adolescent_or_adult_training_completion_age == "I don't know", NA, ifelse(
+      grepl('6 to 18 months \\(adolescence)', 
+            dog_adolescent_or_adult_training_completion_age), TRUE, FALSE)))) %>%
+  mutate(training_complete_age_18_to_36mo = as.factor(ifelse(
+    dog_adolescent_or_adult_training_completion_age == "" | 
+      dog_adolescent_or_adult_training_completion_age == "I don't know", NA, ifelse(
+      grepl('18-36 months \\(social maturity)', 
+            dog_adolescent_or_adult_training_completion_age), TRUE, FALSE)))) %>%
+  mutate(training_complete_age_continue_in_home = as.factor(ifelse(
+    dog_adolescent_or_adult_training_completion_age == "" | 
+      dog_adolescent_or_adult_training_completion_age == "I don't know", NA, ifelse(
+      grepl('Continue to practice and use training skills in home',
+            dog_adolescent_or_adult_training_completion_age), TRUE, FALSE)))) %>%
+  mutate(training_complete_age_continue_classes = as.factor(ifelse(
+    dog_adolescent_or_adult_training_completion_age == "" | 
+      dog_adolescent_or_adult_training_completion_age == "I don't know", NA, ifelse(
+      grepl('Continue to attend classes periodically \\(nose work, agility, trick training, etc\\.)',
+            dog_adolescent_or_adult_training_completion_age), TRUE, FALSE))))
+  
+
+
+
+# convert character-type columns to factors
+
+
 ```
 
 # Additional Data Cleaning
