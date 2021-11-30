@@ -71,7 +71,7 @@ str(df)
 We use the following sections to adjust field types in the data frame.
 
 ```{r}
-# TODO
+
 #copy data frame
 df_adj_dtypes <- df
 
@@ -124,6 +124,147 @@ df_adj_dtypes <- df_adj_dtypes %>%
             dog_adolescent_or_adult_training_completion_age), TRUE, FALSE))))
   
 
+#dog_agression_scenario
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(aggression_strange_people_in_home = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Strangers visiting the home', 
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_strange_people_away_from_home = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Strangers away from the home', 
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_familiar_people_in_home = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Familiar people in the home',
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_familiar_people_away_from_home = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Familiar people away from the home',
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_strange_dog_in_home = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Unfamiliar dogs in the home', 
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_strange_dog_away_from_home = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Unfamiliar dogs away from the home', 
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_familiar_dog_in_home = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Familiar dogs in the home',
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_familiar_dog_away_from_home = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Familiar dogs away from the home',
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_vet = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Veterinarians',
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_other_animals = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Animals other than dogs',
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_groomer = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Groomers',
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_resource_guard = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Resource',
+            dog_aggression_scenario), TRUE, FALSE)))) %>%
+  mutate(aggression_trainer = as.factor(ifelse(
+    dog_aggression_scenario == "" | 
+      dog_aggression_scenario == "I don't know", NA, ifelse(
+      grepl('Trainers',
+            dog_aggression_scenario), TRUE, FALSE))))
+
+# need 'other' category
+
+
+#dog_fear_anxiety_scenario
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(fear_anxiety_crowds = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Fear of crowds', 
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_vet = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Fear of veterinary visits', 
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_thunderstorms = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Fear of thunderstorms',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_other_dogs = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Fear of other dogs',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_noises = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Fear of noises', 
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_other_animals = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Fear of animals other than dogs', 
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_ = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Familiar dogs in the home',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_ = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Familiar dogs away from the home',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_ = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Veterinarians',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_ = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Animals other than dogs',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_ = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Groomers',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_ = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Resource',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_ = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Trainers',
+            dog_fear_anxiety_scenario), TRUE, FALSE))))
+
+  
+  
 
 
 # convert character-type columns to factors
