@@ -61,7 +61,7 @@ We use the following section to drop unnecessary columns from the data frame.
 ```{r}
 df <- df %>%
   select(-(owner_referral_source:owner_token)) %>%
-  select(-(owner_has_another_dog_to_enter:dog_token))
+  select(-(owner_has_another_dog_to_enter:dog_token)) 
 stopifnot(identical(dim(df)+0, c(1181, 41)))
 str(df)
 ```
@@ -79,7 +79,6 @@ df_adj_dtypes <- df
 #df_adj_dtypes[df_adj_dtypes==""] <- NA
 
 # change comma-separated lists into separate columns
-
 # separate each answer into its own column.
 
 #dog_adolescent_or_adult_training_trainer
@@ -181,11 +180,6 @@ df_adj_dtypes <- df_adj_dtypes %>%
       dog_aggression_scenario == "I don't know", NA, ifelse(
       grepl('Groomers',
             dog_aggression_scenario), TRUE, FALSE)))) %>%
-  mutate(aggression_resource_guard = as.factor(ifelse(
-    dog_aggression_scenario == "" | 
-      dog_aggression_scenario == "I don't know", NA, ifelse(
-      grepl('Resource',
-            dog_aggression_scenario), TRUE, FALSE)))) %>%
   mutate(aggression_trainer = as.factor(ifelse(
     dog_aggression_scenario == "" | 
       dog_aggression_scenario == "I don't know", NA, ifelse(
@@ -202,70 +196,355 @@ df_adj_dtypes <- df_adj_dtypes %>%
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
       grepl('Fear of crowds', 
             dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_vet = as.factor(ifelse(
+  mutate(fear_anxiety_noises = as.factor(ifelse(
     dog_fear_anxiety_scenario == "" | 
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Fear of veterinary visits', 
+      grepl('Fear of noises', 
             dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
   mutate(fear_anxiety_thunderstorms = as.factor(ifelse(
     dog_fear_anxiety_scenario == "" | 
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
       grepl('Fear of thunderstorms',
             dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+  mutate(fear_anxiety_vet = as.factor(ifelse(
+    dog_fear_anxiety_scenario == "" | 
+      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
+      grepl('Fear of veterinary visits', 
+            dog_fear_anxiety_scenario), TRUE, FALSE))))  %>%
   mutate(fear_anxiety_other_dogs = as.factor(ifelse(
     dog_fear_anxiety_scenario == "" | 
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
       grepl('Fear of other dogs',
-            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_noises = as.factor(ifelse(
-    dog_fear_anxiety_scenario == "" | 
-      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Fear of noises', 
-            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
+            dog_fear_anxiety_scenario), TRUE, FALSE))))  %>%
   mutate(fear_anxiety_other_animals = as.factor(ifelse(
     dog_fear_anxiety_scenario == "" | 
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
       grepl('Fear of animals other than dogs', 
             dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_ = as.factor(ifelse(
+  mutate(fear_anxiety_separation = as.factor(ifelse(
     dog_fear_anxiety_scenario == "" | 
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Familiar dogs in the home',
+      grepl('Separation anxiety',
             dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_ = as.factor(ifelse(
+  mutate(fear_anxiety_travel = as.factor(ifelse(
     dog_fear_anxiety_scenario == "" | 
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Familiar dogs away from the home',
+      grepl('Travel anxiety',
             dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_ = as.factor(ifelse(
+  mutate(fear_anxiety_general = as.factor(ifelse(
     dog_fear_anxiety_scenario == "" | 
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Veterinarians',
+      grepl('Generalized anxiety',
             dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_ = as.factor(ifelse(
+  mutate(fear_anxiety_ptsd = as.factor(ifelse(
     dog_fear_anxiety_scenario == "" | 
       dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Animals other than dogs',
-            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_ = as.factor(ifelse(
-    dog_fear_anxiety_scenario == "" | 
-      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Groomers',
-            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_ = as.factor(ifelse(
-    dog_fear_anxiety_scenario == "" | 
-      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Resource',
-            dog_fear_anxiety_scenario), TRUE, FALSE)))) %>%
-  mutate(fear_anxiety_ = as.factor(ifelse(
-    dog_fear_anxiety_scenario == "" | 
-      dog_fear_anxiety_scenario == "I don't know", NA, ifelse(
-      grepl('Trainers',
-            dog_fear_anxiety_scenario), TRUE, FALSE))))
+      grepl('Post-traumatic Stress Disorder \\(PTSD)',
+            dog_fear_anxiety_scenario), TRUE, FALSE)))) 
 
+
+#problematic jumping subject
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(jumping_subject_familiar_people = as.factor(ifelse(
+    dog_problematic_jump_subject == "" | 
+      dog_problematic_jump_subject == "I don't know", NA, ifelse(
+      grepl('Familiar people', 
+            dog_problematic_jump_subject), TRUE, FALSE)))) %>%
+  mutate(jumping_subject_owners = as.factor(ifelse(
+    dog_problematic_jump_subject == "" | 
+      dog_problematic_jump_subject == "I don't know", NA, ifelse(
+      grepl('Owners', 
+            dog_problematic_jump_subject), TRUE, FALSE)))) %>%
+  mutate(jumping_subject_strangers = as.factor(ifelse(
+    dog_problematic_jump_subject == "" | 
+      dog_problematic_jump_subject == "I don't know", NA, ifelse(
+      grepl('Stangers',
+            dog_problematic_jump_subject), TRUE, FALSE)))) 
   
   
+#excessive barking scenario
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(excessive_barking_inside_triggers = as.factor(ifelse(
+    dog_excessive_barking_scenario == "" | 
+      dog_excessive_barking_scenario == "I don't know", NA, ifelse(
+      grepl('At triggers \\(inside)', 
+            dog_excessive_barking_scenario), TRUE, FALSE)))) %>%
+  mutate(excessive_barking_outside_triggers = as.factor(ifelse(
+    dog_excessive_barking_scenario == "" | 
+      dog_excessive_barking_scenario == "I don't know", NA, ifelse(
+      grepl('At triggers \\(outside)', 
+            dog_excessive_barking_scenario), TRUE, FALSE)))) %>%
+  mutate(excessive_barking_owner_present = as.factor(ifelse(
+    dog_excessive_barking_scenario == "" | 
+      dog_excessive_barking_scenario == "I don't know", NA, ifelse(
+      grepl('Owners are present',
+            dog_excessive_barking_scenario), TRUE, FALSE)))) %>%
+  mutate(excessive_barking_owner_away = as.factor(ifelse(
+    dog_excessive_barking_scenario == "" | 
+      dog_excessive_barking_scenario == "I don't know", NA, ifelse(
+      grepl('Owners are away', 
+            dog_excessive_barking_scenario), TRUE, FALSE))))  %>%
+  mutate(excessive_barking_attention = as.factor(ifelse(
+    dog_excessive_barking_scenario == "" | 
+      dog_excessive_barking_scenario == "I don't know", NA, ifelse(
+      grepl('To get attention',
+            dog_excessive_barking_scenario), TRUE, FALSE))))  %>%
+  mutate(excessive_barking_car_rides = as.factor(ifelse(
+    dog_excessive_barking_scenario == "" | 
+      dog_excessive_barking_scenario == "I don't know", NA, ifelse(
+      grepl('During car rides', 
+            dog_excessive_barking_scenario), TRUE, FALSE))))
+  
 
+#coprophagia type
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(coprophagia_own_feces = as.factor(ifelse(
+    dog_coprophagia_type == "" | 
+      dog_coprophagia_type == "I don't know", NA, ifelse(
+      grepl('Their own feces', 
+            dog_coprophagia_type), TRUE, FALSE)))) %>%
+  mutate(coprophagia_other_dogs = as.factor(ifelse(
+    dog_coprophagia_type == "" | 
+      dog_coprophagia_type == "I don't know", NA, ifelse(
+      grepl('Dog feces other than their own', 
+            dog_coprophagia_type), TRUE, FALSE)))) %>%
+  mutate(coprophagia_other_animals = as.factor(ifelse(
+    dog_coprophagia_type == "" | 
+      dog_coprophagia_type == "I don't know", NA, ifelse(
+      grepl('The feces of other animals',
+            dog_coprophagia_type), TRUE, FALSE)))) 
+
+
+#dog_repetitive_behavior_type
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(repetitive_behavior_collecting_objects = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Collecting/arranging objects', 
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_licking_wrist = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Licking of the wrist/hock', 
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_sucking_flank = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Sucking flank regions/blankets',
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_ball_fetish = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Tennis ball fetish', 
+            dog_repetitive_behavior_type), TRUE, FALSE))))  %>%
+  mutate(repetitive_behavior_running_in_patterns = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Running in geometric patterns',
+            dog_repetitive_behavior_type), TRUE, FALSE))))  %>%
+  mutate(repetitive_behavior_digging = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Digging in the yard', 
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_nail_biting = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Nail biting',
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_fly_snapping = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Fly snapping \\(when no flies are around)',
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_shadow_chasing = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Shadow/light chasing',
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_stone_chewing = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Stone/rock chewing',
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_tail_chasing = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Tail chasing',
+            dog_repetitive_behavior_type), TRUE, FALSE)))) %>%
+  mutate(repetitive_behavior_spinning = as.factor(ifelse(
+    dog_repetitive_behavior_type == "" | 
+      dog_repetitive_behavior_type == "I don't know", NA, ifelse(
+      grepl('Spinning',
+            dog_repetitive_behavior_type), TRUE, FALSE)))) 
+
+
+#house soiling scenario
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(house_soiling_excited = as.factor(ifelse(
+    dog_house_soil_scenario == "" | 
+      dog_house_soil_scenario == "I don't know", NA, ifelse(
+      grepl('Exited/overwhelmed', 
+            dog_house_soil_scenario), TRUE, FALSE)))) %>%
+  mutate(house_soiling_owner_present = as.factor(ifelse(
+    dog_house_soil_scenario == "" | 
+      dog_house_soil_scenario == "I don't know", NA, ifelse(
+      grepl('Owners are present', 
+            dog_house_soil_scenario), TRUE, FALSE)))) %>%
+  mutate(house_soiling_owner_away = as.factor(ifelse(
+    dog_house_soil_scenario == "" | 
+      dog_house_soil_scenario == "I don't know", NA, ifelse(
+      grepl('Owners are away',
+            dog_house_soil_scenario), TRUE, FALSE)))) 
+
+
+#house soiling type
+# still need to reconcile both urine and feces answers
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(house_soiling_feces = as.factor(ifelse(
+    dog_house_soil_type == "" | 
+      dog_house_soil_type == "I don't know", NA, ifelse(
+      grepl('Feces', 
+            dog_house_soil_type), TRUE, FALSE)))) %>%
+  mutate(house_soiling_urine = as.factor(ifelse(
+    dog_house_soil_type == "" | 
+      dog_house_soil_type == "I don't know", NA, ifelse(
+      grepl('Urine', 
+            dog_house_soil_type), TRUE, FALSE)))) %>%
+  mutate(house_soiling_both = as.factor(ifelse(
+    dog_house_soil_type == "" | 
+      dog_house_soil_type == "I don't know", NA, ifelse(
+      grepl('Both feces and urine',
+            dog_house_soil_type), TRUE, FALSE)))) 
+
+
+#house soiling location
+# need to add "other" category
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(house_soiling_anywhere = as.factor(ifelse(
+    dog_house_soil_location == "" | 
+      dog_house_soil_location == "I don't know", NA, ifelse(
+      grepl('Anywhere', 
+            dog_house_soil_location), TRUE, FALSE)))) %>%
+  mutate(house_soiling_specific_locations = as.factor(ifelse(
+    dog_house_soil_location == "" | 
+      dog_house_soil_location == "I don't know", NA, ifelse(
+      grepl('Specific locations', 
+            dog_house_soil_location), TRUE, FALSE)))) 
+
+
+#rolling in repulsive material type
+# add other type?
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(repulsive_material_urine = as.factor(ifelse(
+    dog_repulsive_material_type == "" | 
+      dog_repulsive_material_type == "I don't know", NA, ifelse(
+      grepl('Urine', 
+            dog_repulsive_material_type), TRUE, FALSE)))) %>%
+  mutate(repulsive_material_feces = as.factor(ifelse(
+    dog_repulsive_material_type == "" | 
+      dog_repulsive_material_type == "I don't know", NA, ifelse(
+      grepl('Feces', 
+            dog_repulsive_material_type), TRUE, FALSE)))) %>%
+  mutate(repulsive_material_dead_stuff = as.factor(ifelse(
+    dog_repulsive_material_type == "" | 
+      dog_repulsive_material_type == "I don't know", NA, ifelse(
+      grepl('Dead stuff',
+            dog_repulsive_material_type), TRUE, FALSE)))) %>%
+  mutate(repulsive_material_garbage = as.factor(ifelse(
+    dog_repulsive_material_type == "" | 
+      dog_repulsive_material_type == "I don't know", NA, ifelse(
+      grepl('Garbage',
+            dog_repulsive_material_type), TRUE, FALSE))))
+
+
+#hyperactive scenario
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(hyperactive_scenario_constant_moving = as.factor(ifelse(
+    dog_hyperactive_scenario == "" | 
+      dog_hyperactive_scenario == "I don't know", NA, ifelse(
+      grepl('Constant moving/jumping', 
+            dog_hyperactive_scenario), TRUE, FALSE)))) %>%
+  mutate(hyperactive_scenario_difficulty_settling = as.factor(ifelse(
+    dog_hyperactive_scenario == "" | 
+      dog_hyperactive_scenario == "I don't know", NA, ifelse(
+      grepl('Difficulty settling', 
+            dog_hyperactive_scenario), TRUE, FALSE)))) %>%
+  mutate(hyperactive_scenario_easily_distracted = as.factor(ifelse(
+    dog_hyperactive_scenario == "" | 
+      dog_hyperactive_scenario == "I don't know", NA, ifelse(
+      grepl('Easily distracted',
+            dog_hyperactive_scenario), TRUE, FALSE)))) %>%
+  mutate(hyperactive_scenario_impulsive = as.factor(ifelse(
+    dog_hyperactive_scenario == "" | 
+      dog_hyperactive_scenario == "I don't know", NA, ifelse(
+      grepl('Impulsiveness',
+            dog_hyperactive_scenario), TRUE, FALSE))))
+
+
+#destruction scenario
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(destruction_scenario_owner_present = as.factor(ifelse(
+    dog_destruction_scenario == "" | 
+      dog_destruction_scenario == "I don't know", NA, ifelse(
+      grepl('Owner is present', 
+            dog_destruction_scenario), TRUE, FALSE)))) %>%
+  mutate(destruction_scenario_owner_away = as.factor(ifelse(
+    dog_destruction_scenario == "" | 
+      dog_destruction_scenario == "I don't know", NA, ifelse(
+      grepl('Owner is away', 
+            dog_destruction_scenario), TRUE, FALSE)))) 
+
+
+#escape scenario
+# other category?
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(escape_scenario_when_out = as.factor(ifelse(
+    dog_escape_scenario == "" | 
+      dog_escape_scenario == "I don't know", NA, ifelse(
+      grepl('Escaped when out', 
+            dog_escape_scenario), TRUE, FALSE)))) %>%
+  mutate(escape_scenario_from_home = as.factor(ifelse(
+    dog_escape_scenario == "" | 
+      dog_escape_scenario == "I don't know", NA, ifelse(
+      grepl('Escapes from home', 
+            dog_escape_scenario), TRUE, FALSE)))) %>%
+  mutate(escape_scenario_from_confinement = as.factor(ifelse(
+    dog_escape_scenario == "" | 
+      dog_escape_scenario == "I don't know", NA, ifelse(
+      grepl('Escapes from confinement',
+            dog_escape_scenario), TRUE, FALSE)))) %>%
+  mutate(escape_scenario_returns_home = as.factor(ifelse(
+    dog_escape_scenario == "" | 
+      dog_escape_scenario == "I don't know", NA, ifelse(
+      grepl('Returns home after escape',
+            dog_escape_scenario), TRUE, FALSE))))
+
+#mount subject
+# other category?
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(mount_subject_familiar_dogs = as.factor(ifelse(
+    dog_mount_subject == "" | 
+      dog_mount_subject == "I don't know", NA, ifelse(
+      grepl('Familiar dogs', 
+            dog_mount_subject), TRUE, FALSE)))) %>%
+  mutate(mount_subject_unfamiliar_dogs = as.factor(ifelse(
+    dog_mount_subject == "" | 
+      dog_mount_subject == "I don't know", NA, ifelse(
+      grepl('Unfamiliar dogs', 
+            dog_mount_subject), TRUE, FALSE)))) %>%
+  mutate(mount_subject_inanimate_objects = as.factor(ifelse(
+    dog_mount_subject == "" | 
+      dog_mount_subject == "I don't know", NA, ifelse(
+      grepl('Inanimate objects',
+            dog_mount_subject), TRUE, FALSE)))) %>%
+  mutate(mount_subject_people = as.factor(ifelse(
+    dog_mount_subject == "" | 
+      dog_mount_subject == "I don't know", NA, ifelse(
+      grepl('People',
+            dog_mount_subject), TRUE, FALSE))))
+
+  
 
 # convert character-type columns to factors
 
