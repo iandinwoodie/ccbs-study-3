@@ -75,11 +75,9 @@ We use the following sections to adjust field types in the data frame.
 #copy data frame
 df_adj_dtypes <- df
 
-# replace blank fields with "NA" ( = no answer / missing values)
-#df_adj_dtypes[df_adj_dtypes==""] <- NA
-
 # change comma-separated lists into separate columns
 # separate each answer into its own column.
+# convert to factor TRUE / FALSE
 
 #dog_adolescent_or_adult_training_trainer
 df_adj_dtypes <- df_adj_dtypes %>%
@@ -544,11 +542,56 @@ df_adj_dtypes <- df_adj_dtypes %>%
       grepl('People',
             dog_mount_subject), TRUE, FALSE))))
 
-  
+```  
+
+```{r}
+
+# replace blank fields with "NA" ( = no answer / missing values)
+df_adj_dtypes[df_adj_dtypes==""] <- NA
 
 # convert character-type columns to factors
+factors <- c(
+  'owner_gender',
+  'dog_gender',
+  'dog_age_is_known',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training',
+  'dog_pre_adolescent_training_type',
+  'dog_pre_adolescent_training_location',
+  'dog_adolescent_or_adult_training',
+  'dog_adolescent_or_adult_training_style',
+  'dog_was_aggressive',
+  'dog_has_fear_or_anxiety',
+  'dog_has_jumped_problematically',
+  'dog_has_barked_excessively',
+  'dog_has_coprophagia',
+  'dog_has_house_soiled',
+  'dog_has_rolled_in_repulsive_material',
+  'dog_was_hyperactive',
+  'dog_was_destructive',
+  'dog_has_escaped',
+  'dog_has_mounted'
+)
 
+for (c in factors) {
+  df_adj_dtypes[, c] <- as.factor(df_adj_dtypes[, c])
+}
 
+str(df[, factors])
+
+```
+
+### Boolean
+
+Some factor columns can be converted to boolean (i.e., logical).
+
+```{r}
+df <- df %>%
+  mutate(at_least_1yo = ifelse(at_least_1yo == 'Yes', TRUE, FALSE)) %>%
+  mutate(neutered = ifelse(neutered == 'Yes', TRUE, FALSE)) %>%
+  mutate(acq_12_wo_or_less = ifelse(
+    acq_12_wo_or_less == "I don't know", NA, ifelse(
+      acq_12_wo_or_less == 'Yes', TRUE, FALSE)))
 ```
 
 # Additional Data Cleaning
