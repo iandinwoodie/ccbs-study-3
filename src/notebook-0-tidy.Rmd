@@ -546,52 +546,70 @@ df_adj_dtypes <- df_adj_dtypes %>%
 
 ```{r}
 
-# replace blank fields with "NA" ( = no answer / missing values)
-df_adj_dtypes[df_adj_dtypes==""] <- NA
 
 # convert character-type columns to factors
 factors <- c(
   'owner_gender',
   'dog_gender',
-  'dog_age_is_known',
-  'dog_was_acquired_pre_adolescent',
-  'dog_attended_pre_adolescent_training',
+  #'dog_age_is_known',
+  #'dog_was_acquired_pre_adolescent',
+  #'dog_attended_pre_adolescent_training',
   'dog_pre_adolescent_training_type',
   'dog_pre_adolescent_training_location',
-  'dog_adolescent_or_adult_training',
-  'dog_adolescent_or_adult_training_style',
-  'dog_was_aggressive',
-  'dog_has_fear_or_anxiety',
-  'dog_has_jumped_problematically',
-  'dog_has_barked_excessively',
-  'dog_has_coprophagia',
-  'dog_has_house_soiled',
-  'dog_has_rolled_in_repulsive_material',
-  'dog_was_hyperactive',
-  'dog_was_destructive',
-  'dog_has_escaped',
-  'dog_has_mounted'
+  #'dog_adolescent_or_adult_training',
+  'dog_adolescent_or_adult_training_style'
+  #'dog_was_aggressive',
+  #'dog_has_fear_or_anxiety',
+  #'dog_has_jumped_problematically',
+  #'dog_has_barked_excessively',
+  #'dog_has_coprophagia',
+  #'dog_has_house_soiled',
+  #'dog_has_rolled_in_repulsive_material',
+  #'dog_was_hyperactive',
+  #'dog_was_destructive',
+  #'dog_has_escaped',
+  #'dog_has_mounted'
 )
 
 for (c in factors) {
   df_adj_dtypes[, c] <- as.factor(df_adj_dtypes[, c])
 }
 
-str(df[, factors])
+str(df_adj_dtypes[, factors])
 
 ```
 
 ### Boolean
 
-Some factor columns can be converted to boolean (i.e., logical).
+Some factor columns can be converted to boolean True / False
+
 
 ```{r}
-df <- df %>%
-  mutate(at_least_1yo = ifelse(at_least_1yo == 'Yes', TRUE, FALSE)) %>%
-  mutate(neutered = ifelse(neutered == 'Yes', TRUE, FALSE)) %>%
-  mutate(acq_12_wo_or_less = ifelse(
-    acq_12_wo_or_less == "I don't know", NA, ifelse(
-      acq_12_wo_or_less == 'Yes', TRUE, FALSE)))
+
+df_adj_dtypes <- df_adj_dtypes %>%
+  mutate(dog_age_is_known = ifelse(dog_age_is_known == 'Yes', TRUE, FALSE)) %>%
+  mutate(dog_was_acquired_pre_adolescent = ifelse(dog_was_acquired_pre_adolescent == 'True', TRUE, FALSE)) %>%
+  mutate(dog_attended_pre_adolescent_training = ifelse(
+    dog_attended_pre_adolescent_training == "I don't know" | dog_attended_pre_adolescent_training == "", NA,  
+    ifelse(dog_attended_pre_adolescent_training == 'Yes', TRUE, FALSE))) %>%
+  mutate(dog_adolescent_or_adult_training = ifelse(
+    dog_adolescent_or_adult_training == "I don't know" | dog_adolescent_or_adult_training == "", NA,  
+    ifelse(dog_adolescent_or_adult_training == 'Yes', TRUE, FALSE))) %>%
+  mutate(dog_was_aggressive = ifelse(dog_was_aggressive == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_fear_or_anxiety = ifelse(dog_has_fear_or_anxiety == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_jumped_problematically = ifelse(dog_has_jumped_problematically == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_barked_excessively = ifelse(dog_has_barked_excessively == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_coprophagia = ifelse(dog_has_coprophagia == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_repetitive_behavior = ifelse(dog_has_repetitive_behavior == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_house_soiled = ifelse(dog_has_house_soiled == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_rolled_in_repulsive_material = ifelse(dog_has_rolled_in_repulsive_material == 'True', TRUE, FALSE)) %>%
+  mutate(dog_was_hyperactive = ifelse(dog_was_hyperactive == 'True', TRUE, FALSE)) %>%
+  mutate(dog_was_destructive = ifelse(dog_was_destructive == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_escaped = ifelse(dog_has_escaped == 'True', TRUE, FALSE)) %>%
+  mutate(dog_has_mounted = ifelse(dog_has_mounted == 'True', TRUE, FALSE)) 
+         
+
+
 ```
 
 # Additional Data Cleaning
@@ -600,6 +618,29 @@ We use the following sections to carry out additional tidying procedures.
 
 ```{r}
 # TODO
+
+# replace blank fields with "NA" ( = no answer / missing values)
+#df_adj_dtypes[df_adj_dtypes==""] <- NA
+
+#remove duplicate columns (character columns that were replaced by factors)
+df_adj_dtypes <- df_adj_dtypes %>%
+  select(-(dog_adolescent_or_adult_training_trainer)) %>%
+  select(-(dog_adolescent_or_adult_training_completion_age))  %>%
+  select(-(dog_aggression_scenario)) %>%
+  select(-(dog_fear_anxiety_scenario)) %>%
+  select(-(dog_problematic_jump_subject)) %>%
+  select(-(dog_excessive_barking_scenario)) %>%
+  select(-(dog_coprophagia_type)) %>%
+  select(-(dog_repetitive_behavior_type)) %>%
+  select(-(dog_house_soil_scenario)) %>%
+  select(-(dog_house_soil_type)) %>%
+  select(-(dog_house_soil_location)) %>%
+  select(-(dog_repulsive_material_type)) %>%
+  select(-(dog_hyperactive_scenario)) %>%
+  select(-(dog_destruction_scenario)) %>%
+  select(-(dog_escape_scenario)) %>%
+  select(-(dog_mount_subject))
+
 ```
 
 # Final Summary
@@ -607,8 +648,10 @@ We use the following sections to carry out additional tidying procedures.
 Take a last look at the data before saving it to disk.
 
 ```{r}
-dim(df)
-summary(df)
+
+df_tidy <- df_adj_dtypes
+dim(df_tidy)
+summary(df_tidy)
 ```
 
 # Saving the Tidy Data
@@ -617,5 +660,5 @@ Save the data to a file in the data directory using RDS format so that the data
 types are stored and the resulting file is compressed.
 
 ```{r}
-saveRDS(df, '../data/tidy.Rds')
+saveRDS(df_tidy, '../data/tidy.Rds')
 ```
