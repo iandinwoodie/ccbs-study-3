@@ -78,9 +78,10 @@ summary(df$behav_problem)
 -- Male/female spilt almost even (579 F, 573 M)
 -- Mean age (in months) is 67 (5.6 years) and median age is 60 (5 years)
 -- a majority of respondents (719/1152 = 62.4%) did NOT acquire their dog in the pre-adolescent stage
--- of the respondents who provided an answer (631), just under half of dogs had attended pre-adolescent training (295/631 = 46.8%). The majority of these dogs (239/295 = 81.0%) had received reward-based training only. A further 14.6% (43/295) received a mix of reward and discipline-based training. The vast majority (256/295 = 86.8%) attended group classes.
+-- of the respondents who provided an answer (631), just under half of dogs had attended pre-adolescent training (295/631 = 46.8%). The majority of these dogs (239/295 = 81.0%) had received reward-based training only. A further 14.6% (43/295) received a mix of reward and discipline-based training. The vast majority (256/295 = 86.8%) attended group classes (as opposed to private training or boot camp).
 -- of the respondents who provided an answer (773), more than half of dogs had attended adolescent or adult training (596/773 = 65.5%). Again the majority (410/506 = 81.0%) received reward-based training only through group classes (382/410 = 93.2%)
 -- of the respondents that reported at least one behavioral problem, slight more than half (53.5% or 321 out of 600) had NOT undergone pre-adolescent training. However, more than half (65.3% or 489 out of 749) had undergone adolescent or adult training. 
+-- the majority continued some form of training post-puppyhood: 13% (87/675) completed in adolescence, 13% (86/675) completed once the dog had reached adulthood, 46% (313/675) continue to train in-home, and 38% (256/675) continue to attend classes, with 62% (419/675) reporting some kind of continued training 
 
 #specific behavior problems:
 -- 37.3% reported aggression (430/1152)
@@ -125,7 +126,6 @@ df %>%
 
 ```
 
-# of the owners/dogs that reported any behavioral problems, slight more than half (53.5% or 321 out of 600) had NOT attended pre-adolescent training
 
 ```{r}
 ggplot(df, aes(x = dog_adolescent_or_adult_training)) +
@@ -147,7 +147,12 @@ df %>%
     geom_tile(mapping = aes(fill = n))
 
 ```
-# of the owners/dogs that reported any behavioral problems, more than half (65.3% or 489 out of 749) had attended adolescent or adult training
+# of the owners/dogs that reported any behavioral problems,
+
+# slightly more than half (53.5% or 321 out of 600) had NOT attended pre-adolescent training
+# more than half (65.3% or 489 out of 749) had attended adolescent or adult training
+
+# there is likely an association between dogs with behavior issues and attending adolescent / adult training i.e. owners with dogs that have issues are more likely to sign up for additional training
 
 
 
@@ -224,11 +229,14 @@ treatment group: those with pre-adolescent training and adolescent and/or adult 
 
 ```{r}
 df_control <- subset(df, dog_attended_pre_adolescent_training==TRUE & dog_adolescent_or_adult_training==FALSE)
-df_treat <- subset(df, dog_attended_pre_adolescent_training==TRUE & dog_adolescent_or_adult_training==TRUE)
+df_exp <- subset(df, dog_attended_pre_adolescent_training==TRUE & dog_adolescent_or_adult_training==TRUE)
 df_adult_only <- subset(df, dog_attended_pre_adolescent_training==FALSE & dog_adolescent_or_adult_training==TRUE)
 df_no_training <- subset(df, dog_attended_pre_adolescent_training==FALSE & dog_adolescent_or_adult_training==FALSE)
 
-nrow(df_control) + nrow(df_treat) + nrow(df_adult_only) + nrow(df_no_training)
+nrow(df_control) + nrow(df_exp) + nrow(df_adult_only) + nrow(df_no_training)
+
+df_continue_training <- subset(df, training_complete_age_continue_in_home==TRUE | training_complete_age_continue_classes==TRUE)
+
 
 ```
 
@@ -245,7 +253,7 @@ ggplot(df_control, aes(x = behav_problem)) +
   geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
 
 # how many of dogs with behavior problems have had pre-adolescent training and further training?
-ggplot(df_treat, aes(x = behav_problem)) +
+ggplot(df_exp, aes(x = behav_problem)) +
   geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
 
 # how many of dogs with behavior problems have had no training?
@@ -340,7 +348,7 @@ for (i in 1:length(vars)) {
     geom_bar(fill='steelblue')
   plot_list[[i]] <- p
 }
-ggarrange(plotlist=plot_list, ncol=4, nrow=5)
+ggarrange(plotlist=plot_list, ncol=3, nrow=4)
 ```
 
 
@@ -381,16 +389,15 @@ experimental group consists of those who attended both puppy and adolescent/adul
 Let's look at the variables common to both groups with the plot color indicating the presence of a behavior
 problem. Since we know a vast majority of dogs have at least one behavior
 problem, we need to look for trends in individual behavior problems for the
-plots to be useful.
+plots to be useful. 
 
 ```{r, fig.height=10, fig.width=5}
 # Generate plots for each attribute split by a simple predictor.
-pred <- 'train_6mo_or_less'
+pred <- 'any_training'
 attribs <- c(
-  'acq_12_wo_or_less',
-  'age_yrs',
-  'male',
-  'neutered'
+  'dog_was_acquired_pre_adolescent',
+  'dog_age_in_months',
+  'dog_gender'
 )
 attribs <- sort(attribs)
 outcomes <- sort(outcomes)
@@ -410,6 +417,82 @@ for (i in 1:length(outcomes)) {
       labs(fill=pred) +
       theme(legend.position='none') +
       facet_grid(as.formula(paste0('.~', outcome)))
+    plot_list[[cnt]] <- p
+    cnt <- cnt + 1
+    labels <- c(labels, outcome)
+  }
+}
+ggarrange(plotlist=plot_list, ncol=4, nrow=12, common.legend=TRUE,
+          font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
+```
+## Within the Experimental Group
+
+Within the experimental group we are curious to see the impact of various
+training techniques on behavior problem occurrence. We
+start by isolating the experimental group.
+
+```{r}
+summary(df_control)
+```
+
+```{r}
+summary(df_exp)
+```
+Now we look at the impact of training age and frequency.
+
+```{r, fig.height=10, fig.width=5}
+attribs <- c(
+  'dog_attended_pre_adolescent_training',
+  'dog_adolescent_or_adult_training'
+)
+attribs <- sort(attribs)
+
+plot_list <- list()
+cnt <- 1
+labels <- NULL
+for (i in 1:length(outcomes)) {
+  outcome <- outcomes[i]
+  for (j in 1:length(attribs)) {
+    attrib <- attribs[j]
+    p <- df %>%
+      drop_na(attrib) %>%
+      select(attrib, outcome) %>%
+      ggplot(aes_string(x=attrib, fill=outcome)) +
+      geom_bar(position = position_dodge(0.9)) +
+      labs(fill='has this behavior problem') +
+      theme(legend.position='none')
+    plot_list[[cnt]] <- p
+    cnt <- cnt + 1
+    labels <- c(labels, outcome)
+  }
+}
+ggarrange(plotlist=plot_list, ncol=5, nrow=12, common.legend=TRUE,
+          font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
+```
+Next, we try to visual the impact (if any) of type of training
+
+```{r, fig.height=10, fig.width=5}
+attribs <- c(
+  'device_used',
+  'buckle_collar',
+  'harness',
+  'head_halter'
+)
+
+plot_list <- list()
+cnt <- 1
+labels <- NULL
+for (i in 1:length(outcomes)) {
+  outcome <- outcomes[i]
+  for (j in 1:length(attribs)) {
+    attrib <- attribs[j]
+    p <- df %>%
+      drop_na(attrib) %>%
+      select(attrib, outcome) %>%
+      ggplot(aes_string(x=attrib, fill=outcome)) +
+      geom_bar(position = position_dodge(0.9)) +
+      labs(fill='has this behavoior problem') +
+      theme(legend.position='none')
     plot_list[[cnt]] <- p
     cnt <- cnt + 1
     labels <- c(labels, outcome)
