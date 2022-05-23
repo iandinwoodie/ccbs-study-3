@@ -286,7 +286,8 @@ Create column indicating whether the dog had any type of training (preadolescent
 
 df <- df %>%
   mutate(any_training = ifelse(
-    dog_attended_pre_adolescent_training | dog_adolescent_or_adult_training, TRUE, FALSE))
+    dog_attended_pre_adolescent_training | dog_adolescent_or_adult_training & !is.na(dog_attended_pre_adolescent_training), 
+    TRUE, FALSE))
 summary(df$any_training)
 ```
 
@@ -297,13 +298,33 @@ How many dogs have behaviour problems with no vs. some training?
 ggplot(data = df) +  
        geom_count(mapping = aes(x = any_training, y = behav_problem))
 
+df %>% 
+  count(any_training, behav_problem) %>%  
+  ggplot(mapping = aes(x = any_training, y = behav_problem)) +
+    geom_tile(mapping = aes(fill = n))
+
+
 ```
 
 ```{r}
-nrow(df[df$any_training == TRUE & df$behav_problem == FALSE, ])
+#nrow(df[df$any_training == FALSE & df$behav_problem == FALSE, ])
+#nrow(df[df$any_training == FALSE & df$behav_problem == TRUE, ])
 
+df1 = subset(df, any_training == FALSE & behav_problem == FALSE)
+df2 = subset(df, any_training == FALSE & behav_problem == TRUE)
+
+df3 = subset(df, any_training == TRUE & behav_problem == FALSE)
+df4 = subset(df, any_training == TRUE & behav_problem == TRUE)
 
 ```
+
+6 dogs with no training have no behavior problems
+187 dogs with no training do have behavior problems
+17 dogs with some training have no behavior problems
+413 dogs with some training do have behavior problems
+
+(Most dogs in the study have at least one behavior problem)
+(these numbers include one dog_adolescent_or_adult_training=NA response, need to remove it from df)
 
 ```{r, fig.height=5, fig.width=5}
 df %>%
