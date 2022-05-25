@@ -184,6 +184,26 @@ Result: same variables are of same order of significance with chi squared test
 
 ## Binary Logistic Regression
 
+```{r}
+pred <- 'dog_adolescent_or_adult_training'
+
+for (outcome in outcomes) {
+  cat(paste(replicate(80, '-'), collapse=''))
+  cat(paste0('\n', outcome, '\n'))
+  f <- as.formula(paste0(outcome, '~', '.'))
+  
+  df_tmp <- df_all_preK_training[,c(outcome, pred)]
+  #df_tmp <- apply_min_xtab(df_tmp, outcome)
+  
+  glm_fit <- glm(f, data=df_tmp, family='binomial')
+  print(summary(glm_fit))
+  print(exp(cbind(OR=coef(glm_fit), suppressMessages(confint(glm_fit)))))
+  #cat('\nVIF:\n')
+  #print(car::vif(glm_fit))
+  cat('\n')
+}
+```
+
 Let's consider what other factors may also come in to play:
 
 - Dog Age
@@ -222,6 +242,9 @@ apply_min_xtab <- function(df, outcome, cutoff=10)
 
 Now we perform the logistic regression.
 
+when including age (the only continuous variable)
+do not apply exclusion for min number of responses 
+
 ```{r}
 pred <- 'dog_adolescent_or_adult_training'
 glm_attribs <- c(
@@ -236,7 +259,8 @@ for (outcome in outcomes) {
   f <- as.formula(paste0(outcome, '~', '.'))
   
   df_tmp <- df_all_preK_training[,c(outcome, pred, glm_attribs)]
-  df_tmp <- apply_min_xtab(df_tmp, outcome)
+  #do not apply min function-- this only excludes age, which is continuous
+  #df_tmp <- apply_min_xtab(df_tmp, outcome) 
   
   glm_fit <- glm(f, data=df_tmp, family='binomial')
   print(summary(glm_fit))
@@ -247,10 +271,12 @@ for (outcome in outcomes) {
 }
 ```
 
+
 # Investigating Training Specifics
 
-At this point we have identified that puppy training has a significant impact on
-certain behavior problems. Now we want to investigate the impact of certain
+we have identified that adolescent/adult training has a marginally 
+significant impact on some behavior problems. 
+Now we want to investigate the impact of certain
 training factors.
 
 ## Isolating the Experimental Data Set
@@ -263,23 +289,142 @@ df_exp_all <- df_all_preK_training %>%
   filter(dog_adolescent_or_adult_training == TRUE)
 summary(df_exp_all)
 ```
+#add some factors for training style
+```{r}
+df_exp_all <- df_exp_all %>%
+  mutate(reward = ifelse(
+    (is.na(dog_adolescent_or_adult_training_style) | 
+      dog_adolescent_or_adult_training_style == 'I don\'t know'), NA, ifelse(
+      dog_adolescent_or_adult_training_style == 'Reward based', TRUE, FALSE)))
+
+df_exp_all <- df_exp_all %>%
+  mutate(discipline = ifelse(
+    (is.na(dog_adolescent_or_adult_training_style) |
+      dog_adolescent_or_adult_training_style == 'I don\'t know'), NA, ifelse(
+      dog_adolescent_or_adult_training_style == 'Discipline based', TRUE, FALSE)))
+
+df_exp_all <- df_exp_all %>%
+  mutate(mixed_style = ifelse(
+    (is.na(dog_adolescent_or_adult_training_style) |
+      dog_adolescent_or_adult_training_style == 'I don\'t know'), NA, ifelse(
+      dog_adolescent_or_adult_training_style == 'Mixed balance of both reward and discipline', TRUE, FALSE)))
+```
 
 ## Binary Logistic Regression
 
 We want to answer the following questions about the training:
 
-- Does continued training beyond adolescence (6-18 mo) produce a better outcome? 
-- Did training technique (reward vs. punishment) have an impact on the
-outcome?
-- Did the number of sessions have an impact on the outcome?
-- Did the choice of restraining device have an impact on the outcome?
+- Does continued training throughout dog's life produce a better outcome? 
+- Did training technique (reward vs. punishment) have an impact on the outcome?
+- Did the location of training have an impact on the outcome?
 
 We will need to expand the independent variables used for the model to answer
 these questions.
 
+(The vast majority of dogs who had adolescent/adult training received 
+reward-based training at group classes)
+
 ```{r}
+#only choose outcomes that were significant?
+outcomes_sig <- c(
+  'dog_was_aggressive',
+  'dog_has_fear_or_anxiety',
+  'dog_has_jumped_problematically',
+  #'dog_has_barked_excessively',
+  #'dog_has_coprophagia',
+  'dog_has_repetitive_behavior',
+  'dog_has_house_soiled',
+  #'dog_has_rolled_in_repulsive_material',
+  #'dog_was_hyperactive',
+  'dog_was_destructive'
+  #'dog_has_escaped',
+  #'dog_has_mounted'
+)
+outcomes_sig <- sort(outcomes_sig)
+
+glm_attribs <- c(
+  'dog_age_in_months',
+  'dog_gender',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training'
+)
+
+
+training_style <- c(
+  'reward',
+  'discipline',
+  'mixed_style'
+)
+training_age <- c(
+  'training_complete_age_6_to_18mo',
+  'training_complete_age_18_to_36mo',
+  'training_complete_age_continue_in_home',
+  'training_complete_age_continue_classes'
+)
+training_location <- c(
+  'trainer_group_classes',
+  'trainer_boot_camp',
+  'trainer_home_private'
+)
+
+glm_attribs <- c(
+  glm_attribs,
+  training_style,
+  training_age,
+  training_location
+)
+
+print(glm_attribs)
 
 ```
+
+Now we can build and evaluate our models for the various outcomes.
+
+
+```{r}
+
+#note that training style appears to be highly co-variate with other variables,
+#so exclude it
+
+glm_attribs <- c(
+  #glm_attribs,
+  #'dog_age_in_months',
+  'dog_gender',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training',
+  #training_style
+  training_age,
+  training_location
+)
+
+```
+
+
+```{r}
+for (outcome in outcomes_sig) {
+  cat(paste(replicate(80, '-'), collapse=''))
+  cat(paste0('\n', outcome, '\n'))
+  f <- as.formula(paste0(outcome, '~', '.'))
+  
+  df_tmp <- df_exp_all[,c(outcome, glm_attribs)]
+  df_tmp <- apply_min_xtab(df_tmp, outcome)
+  
+  # If necessary, drop columns due to separability problems.
+  #if (outcome == 'destructive') {
+  #  df_tmp <- subset(df_tmp, select=-c(shock_collar))
+  #}
+  
+  glm_fit <- glm(f, data=df_tmp, family='binomial')
+  print(summary(glm_fit))
+  print(exp(cbind(OR=coef(glm_fit), suppressMessages(confint(glm_fit)))))
+  cat('\nVIF:\n')
+  print(car::vif(glm_fit))
+  cat('\n')
+}
+```
+There seems to be very little impact of type of training, completion age, or training location
+Pre-adolescent training was the most significant variable within the experimental group that predicts
+presence of behavior
 
 ```{r}
 
