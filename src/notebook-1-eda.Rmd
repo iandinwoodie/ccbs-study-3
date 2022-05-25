@@ -671,7 +671,7 @@ ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
           font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
 ```
 
-#if the dog was acquired pre-adolescent, there appears to be a visible postive impact of training on a few behaviors: excessive barking, coprophagia, fear / anxiety, mounting, rolling in repulsive material, and aggressive
+#if the dog was acquired pre-adolescent, there appears to be a visible postive impact of training on a few behaviors: excessive barking, coprophagia, fear / anxiety, mounting, rolling in repulsive material, and aggression
 
 #gender does not seem to have much of an affect, except for males with aggression-- males who have not received adult training are far more likely to show aggression 
 
@@ -709,6 +709,12 @@ ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
 ```
 
 ```{r}
+
+#save datasets separated by pre-adolescent training status
+saveRDS(df_control, '../data/df_control.Rds')
+saveRDS(df_exp, '../data/df_exp.Rds')
+saveRDS(df_no_training, '../data/df_no_training.Rds')
+saveRDS(df_adult_only, '../data/df_adult_only.Rds')
 
 
 ```
