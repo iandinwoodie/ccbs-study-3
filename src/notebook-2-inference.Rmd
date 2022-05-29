@@ -53,7 +53,7 @@ df_no_preK_training <- rbind(df_adult_only,df_no_training)
 
 nrow(df_preK_training) + nrow(df_no_preK_training)
 
-df_all_preK_training <- rbind(df_preK_training,df_no_preK_training)
+df_all <- rbind(df_preK_training,df_no_preK_training)
 
 ```
 
@@ -112,7 +112,7 @@ idx <- NULL
 p_values <- NULL
 odds_ratios <- NULL 
 for (outcome in outcomes) {
-  tbl <- table(df_all_preK_training[, pred], df_all_preK_training[, outcome], dnn=c(pred, outcome))
+  tbl <- table(df_all[, pred], df_all[, outcome], dnn=c(pred, outcome))
   fisher <- fisher.test(tbl)
   idx <- c(idx, outcome)
   p_values <- c(p_values, fisher$p.value)
@@ -162,7 +162,7 @@ idx <- NULL
 p_values <- NULL
 odds_ratios <- NULL 
 for (outcome in outcomes) {
-  tbl <- table(df_all_preK_training[, pred], df_all_preK_training[, outcome], dnn=c(pred, outcome))
+  tbl <- table(df_all[, pred], df_all[, outcome], dnn=c(pred, outcome))
   chisq <- chisq.test(tbl)
   idx <- c(idx, outcome)
   p_values <- c(p_values, chisq$p.value)
@@ -192,7 +192,7 @@ for (outcome in outcomes) {
   cat(paste0('\n', outcome, '\n'))
   f <- as.formula(paste0(outcome, '~', '.'))
   
-  df_tmp <- df_all_preK_training[,c(outcome, pred)]
+  df_tmp <- df_all[,c(outcome, pred)]
   #df_tmp <- apply_min_xtab(df_tmp, outcome)
   
   glm_fit <- glm(f, data=df_tmp, family='binomial')
@@ -222,6 +222,7 @@ apply_min_xtab <- function(df, outcome, cutoff=10)
   for (col in names(df)) {
     if (col == outcome) next
     if (is.integer(df[,col])) next
+    if (is.numeric(df[,col])) next # added in order not to exclude dog age
     
     xtab <- table(df[,col], df[,outcome])
     if (min(xtab) < cutoff) {
@@ -258,7 +259,7 @@ for (outcome in outcomes) {
   cat(paste0('\n', outcome, '\n'))
   f <- as.formula(paste0(outcome, '~', '.'))
   
-  df_tmp <- df_all_preK_training[,c(outcome, pred, glm_attribs)]
+  df_tmp <- df_all[,c(outcome, pred, glm_attribs)]
   #do not apply min function-- this only excludes age, which is continuous
   #df_tmp <- apply_min_xtab(df_tmp, outcome) 
   
@@ -285,7 +286,7 @@ First, we isolate the experimental group (those who attended adolescent/adult
 training) into their own data set.
 
 ```{r}
-df_exp_all <- df_all_preK_training %>%
+df_exp_all <- df_all %>%
   filter(dog_adolescent_or_adult_training == TRUE)
 summary(df_exp_all)
 ```
@@ -325,20 +326,20 @@ these questions.
 reward-based training at group classes)
 
 ```{r}
-#only choose outcomes that were significant?
+
 outcomes_sig <- c(
   'dog_was_aggressive',
   'dog_has_fear_or_anxiety',
   'dog_has_jumped_problematically',
-  #'dog_has_barked_excessively',
-  #'dog_has_coprophagia',
+  'dog_has_barked_excessively',
+  'dog_has_coprophagia',
   'dog_has_repetitive_behavior',
   'dog_has_house_soiled',
-  #'dog_has_rolled_in_repulsive_material',
-  #'dog_was_hyperactive',
-  'dog_was_destructive'
-  #'dog_has_escaped',
-  #'dog_has_mounted'
+  'dog_has_rolled_in_repulsive_material',
+  'dog_was_hyperactive',
+  'dog_was_destructive',
+  'dog_has_escaped',
+  'dog_has_mounted'
 )
 outcomes_sig <- sort(outcomes_sig)
 
@@ -349,11 +350,11 @@ glm_attribs <- c(
   'dog_attended_pre_adolescent_training'
 )
 
-
+#use single factor, reward or no
 training_style <- c(
-  'reward',
-  'discipline',
-  'mixed_style'
+  'reward'
+  #'discipline',
+  #'mixed_style'
 )
 training_age <- c(
   'training_complete_age_6_to_18mo',
@@ -383,16 +384,18 @@ Now we can build and evaluate our models for the various outcomes.
 
 ```{r}
 
-#note that training style appears to be highly co-variate with other variables,
-#so exclude it
+#note that training style appears to be highly co-variate with other variables
+# when discipline and mixed style is included
+# make it binary, reward or not reward
+
 
 glm_attribs <- c(
   #glm_attribs,
-  #'dog_age_in_months',
+  'dog_age_in_months',
   'dog_gender',
   'dog_was_acquired_pre_adolescent',
   'dog_attended_pre_adolescent_training',
-  #training_style
+  training_style,
   training_age,
   training_location
 )
@@ -408,6 +411,8 @@ for (outcome in outcomes_sig) {
   
   df_tmp <- df_exp_all[,c(outcome, glm_attribs)]
   df_tmp <- apply_min_xtab(df_tmp, outcome)
+  
+  # do not apply min xtab function to dog age
   
   # If necessary, drop columns due to separability problems.
   #if (outcome == 'destructive') {
