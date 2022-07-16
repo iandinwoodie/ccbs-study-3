@@ -66,6 +66,19 @@ stopifnot(identical(dim(df)+0, c(1181, 41)))
 str(df)
 ```
 
+# remove duplicate entries
+
+```{r}
+
+#due to some unknown error, some entries are duplicated; 
+#remove these from the data frame for analysis
+
+df = df[!duplicated(df),]
+
+# [ Note: 170 entries were removed in this step ]
+
+```
+
 # Adjusting Data Types
 
 We use the following sections to adjust field types in the data frame.
@@ -658,16 +671,14 @@ df_adj_dtypes <- df_adj_dtypes %>%
     ifelse(dog_has_mounted == 'True', TRUE, FALSE))) 
          
 
-
 ```
 
 # Additional Data Cleaning
 
 We use the following sections to carry out additional tidying procedures.
 
+
 ```{r}
-
-
 
 #remove duplicate columns (character columns that were replaced by factors)
 df_adj_dtypes <- df_adj_dtypes %>%
