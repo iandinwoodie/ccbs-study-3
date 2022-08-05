@@ -55,6 +55,9 @@ nrow(df_preK_training) + nrow(df_no_preK_training)
 
 df_all <- rbind(df_preK_training,df_no_preK_training)
 
+df_valid_responses <- subset(df, dog_adolescent_or_adult_training==TRUE | dog_adolescent_or_adult_training==FALSE)
+
+
 ```
 
 ## Overview
@@ -112,7 +115,7 @@ idx <- NULL
 p_values <- NULL
 odds_ratios <- NULL 
 for (outcome in outcomes) {
-  tbl <- table(df_all[, pred], df_all[, outcome], dnn=c(pred, outcome))
+  tbl <- table(df_valid_responses[, pred], df_valid_responses[, outcome], dnn=c(pred, outcome))
   fisher <- fisher.test(tbl)
   idx <- c(idx, outcome)
   p_values <- c(p_values, fisher$p.value)

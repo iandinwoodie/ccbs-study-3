@@ -29,7 +29,7 @@ if (!file.exists(tidy_data_filepath)) {
   rmarkdown::render('./notebook-0-tidy.Rmd')
 }
 df <- readRDS(tidy_data_filepath)
-stopifnot(identical(dim(df)+0, c(1181, 104)))
+stopifnot(identical(dim(df)+0, c(1011, 107)))
 str(df)
 ```
 ## Overview of Data Set
@@ -84,29 +84,45 @@ summary(df$num_behv_problems)
   
 ```
 
-# general notes on dataset: (all stats exclude no answer or NA's)
--- 749 out of 1152 or 65.0% reported at least one behavior problem
--- Dog gender spilt almost even (579 F, 573 M)
--- Many, many more female owners (1084) than male (84) responded to the survey 
--- Mean age (in months) is 67 (5.6 years) and median age is 60 (5 years)
--- a majority of respondents (719/1152 = 62.4%) did NOT acquire their dog in the pre-adolescent stage
--- of the respondents who provided an answer (631), just under half of dogs had attended pre-adolescent training (295/631 = 46.8%). The majority of these dogs (239/295 = 81.0%) had received reward-based training only. A further 14.6% (43/295) received a mix of reward and discipline-based training. The vast majority (256/295 = 86.8%) attended group classes (as opposed to private training or boot camp).
--- of the respondents who provided an answer (773), more than half of dogs had attended adolescent or adult training (506/773 = 65.5%). Again the majority (410/506 = 81.0%) received reward-based training only and attended group classes (382/410 = 93.2%)
--- of the respondents that reported at least one behavioral problem, slight more than half (53.5% or 321 out of 600) had NOT undergone pre-adolescent training. However, more than half (65.3% or 489 out of 749) had undergone adolescent or adult training. 
--- the majority continued some form of training post-puppyhood: 13% (87/675) completed in adolescence, 13% (86/675) completed once the dog had reached adulthood, 46% (313/675) continue to train in-home, and 38% (256/675) continue to attend classes, with 62% (419/675) reporting some kind of continued training 
--- median number of behavior problems is 2
+#summary stats specific to included responses
+
+```{r}
+
+summary(df[df$dog_adolescent_or_adult_training==TRUE | df$dog_adolescent_or_adult_training==FALSE,])
+
+length(which(df$training_complete_age_continue_in_home==TRUE | df$training_complete_age_continue_classes==TRUE))
+
+```
+
+# general notes on dataset: (all stats exclude no answer or NA's unless otherwise stated)
+-- 322 (out of 1011 total obs) responses are excluded due to no response (NA's) in either training or behavior questions; many of these dogs were too young to take part in the survey (<12 mo)
+-- 671 out of 689 or 97.4% reported at least one behavior problem
+-- median number of behavior problems is 4, and mean is 3.7
+-- Dog gender spilt almost even, slight bias towards male (478 F / 507 M total, 325 F / 364 M with valid responses)
+-- 634 unique dog owners, median 1 dog owned, mean 1.6 (all respondents)
+-- Mean age (in months) is 80.9 (6.7 years) and median age is 75 (6.25 years) [Note all dogs less than 12 months excluded from analysis]
+-- a majority of respondents (389/689 = 56%) acquired their dog in the pre-adolescent stage
+-- of the respondents who provided an answer (559), just under half of dogs had attended pre-adolescent training (260/559 = 46.5%). The majority of these dogs (209/260 = 80.4%) had received reward-based training only. A further 15% (39/260) received a mix of reward and discipline-based training. The vast majority (229/260 = 88%) attended group classes (as opposed to private training or boot camp).
+-- More than half of dogs had attended adolescent or adult training (442/689 = 64.2%). The vast majority (358/442 = 81.0%) reported receiving reward-based training only and attended group classes (387/442 = 87.6%)
+
+-- the majority continued some form of training post-puppyhood: 11% (77/689) completed in adolescence (defined as 6 to 18 months), 10.6% (73/689) completed between ages 18-36 months (social maturity), 39.6% (273/689) continue to train in-home, and 32.8% (226/689) continue to attend classes, with 53% (365/689) reporting some kind of continued training 
+
 
 #specific behavior problems:
--- 37.3% reported aggression (430/1152)
--- 49.1% reported fear or anxiety (566/1152)
--- 13.1% reported problematic jumping (151/1152)
--- 12.4% reported excessive barking (143/1152)
--- 28.6% reported coprophagia (330/1152)
--- 17.7% reported repetitive behavior (204/1152)
--- 15.8% reported house soiling (182/1152)
--- 27.2% reported rolling in repulsive material (313/1152)
--- 8.0% reported hyperactivity (92/1152)
--- 10.4% reported destructive behavior (120/1152)
+-- 56.2% reported aggression (387/689)
+-- 73.9% reported fear or anxiety (509/689)
+-- 19.4% reported problematic jumping (134/689)
+-- 19.0% reported excessive barking (131/689)
+-- 41.7% reported coprophagia (287/689)
+-- 26.9% reported repetitive behavior (185/689)
+-- 23.1% reported house soiling (159/689)
+-- 41.1% reported rolling in repulsive material (283/689)
+-- 12.5% reported hyperactivity (86/689)
+-- 15.4% reported destructive behavior (106/689)
+-- 26.3% reported escaping (181/689)
+-- 18.4% reported mounting (127/689)
+
+
 
 
 # make some plots to visualise data
@@ -161,10 +177,12 @@ df %>%
 ```
 Of the owners/dogs that reported any behavioral problems,
 
-slightly more than half (53.5% or 321 out of 600) had NOT attended pre-adolescent training
-more than half (65.3% or 489 out of 749) had attended adolescent or adult training
+less than half (46.1% or 250 out of 542 responses) had attended pre-adolescent training
+more than half (62.6% or 431 out of 689) had attended adolescent or adult training
 
 there is likely an association between dogs with behavior issues and attending adolescent / adult training i.e. owners with dogs that have issues are more likely to sign up for additional training
+
+However almost all dogs had some kind of behavior problem, so this is not likely to be significant
 
 
 # examine variable distribution for all variables
@@ -199,7 +217,7 @@ df <- subset(df, select=-c(log_owner_age))
 
 
 ```
-not helpful-- skews in the opposite direction with log transform
+not helpful-- still skews with log transform
 
 
 
@@ -236,12 +254,12 @@ df_continue_training <- subset(df, training_complete_age_continue_in_home==TRUE 
 
 ```
 
-Of the 1181 total survey responses, 559 need to be excluded because they did not answer whether the dog had received pre-adolescent training and/or adult training. This leaves 622 responses. The breakdown of the group:
+Of the 1011 total survey responses, 452 need to be excluded because they did not answer whether the dog had received pre-adolescent training and/or adult training. This leaves 559 responses. The breakdown of the group:
 
-193 had no training (neither pre-adolescent or adult)
-40 had pre-adolescent but no further training
-254 had pre-adolescent and adult training
-135 had no pre-adolescent training but did have adult training
+177 had no training (neither pre-adolescent or adult)
+37 had pre-adolescent but no further training
+223 had pre-adolescent and adult training
+122 had no pre-adolescent training but did have adult training
 
 ```{r}
 # how many of dogs with behavior problems have had pre-adolescent training but no further training?
@@ -262,12 +280,11 @@ ggplot(df_adult_only, aes(x = behav_problem)) +
 
 ```
 # small sample problem? too many dogs have at least one behavior problem
-(many people who did not report a behavior problem did not answer the training questions)
 
-control group: 1 no behavior problem, 39 yes (2.5% have a behavior problem)
-exp group: 14 no, 240 yes (5.5%)
-no training: 6 no, 187 yes (3.1%)
-only adult training: 1 no, 134 yes (0.7%)
+control group: 1 no behavior problem, 36 yes 
+exp group: 9 no, 214 yes 
+no training: 6 no, 171 yes 
+only adult training: 1 no, 121 yes 
 
 ```{r, fig.height=5, fig.width=5}
 df %>%
@@ -281,18 +298,7 @@ df %>%
           progress=FALSE) +
   theme(legend.position='bottom')
 ```
-
-Some interesting things about this figure:
-
-** age distribution of dogs without behavior problems heavily skewed towards younger dogs (less than 24 months)
-Might want to exclude dogs < 6 months, who have not had an opportunity for adolescent / adult training? There are 96 dogs <= 6 months old
-
-** those that reported acquiring their dog pre-adolescence were far more likely to report a behavior problem:
-(412/433 = 95.2% have behavior problem), as opposed to those who acquired dog later (337/719 = 46.9%)
-
-** Males slightly more likely to have behavior problem?
-(386/573=67.4% of males have behavior problem, as opposed to 363/579=62.7% of females)
-
+There are too few dogs without behavior issues to draw any conclusions from this figure
 
 Create column indicating whether the dog had any type of training (preadolescent or adult)
 
@@ -333,12 +339,11 @@ df4 = subset(df, any_training == TRUE & behav_problem == TRUE)
 ```
 
 6 dogs with no training have no behavior problems
-187 dogs with no training do have behavior problems
-17 dogs with some training have no behavior problems
-413 dogs with some training do have behavior problems
+171 dogs with no training do have behavior problems
+11 dogs with some training have no behavior problems
+371 dogs with some training do have behavior problems
 
 (Most dogs in the study have at least one behavior problem)
-(these numbers include one dog_adolescent_or_adult_training=NA response, need to remove it from df)
 
 ```{r, fig.height=5, fig.width=5}
 df %>%
@@ -419,7 +424,13 @@ for (i in 1:length(vars)) {
 }
 ggarrange(plotlist=plot_list, ncol=3, nrow=4)
 ```
-
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/training_variables_barplot.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list, ncol=3, nrow=4)
+dev.off()
+```
 
 ### Dependent Variables
 
@@ -451,6 +462,14 @@ for (i in 1:length(outcomes)) {
 }
 ggarrange(plotlist=plot_list, ncol=4, nrow=3)
 ```
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/behavior_problems_barplot.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list, ncol=3, nrow=4)
+dev.off()
+```
+
 ## Control vs Experimental Group
 
 Our control group consists of the dogs who attended puppy training but no further training and our
@@ -505,6 +524,15 @@ for (i in 1:length(vars_control)) {
 ggarrange(plotlist=plot_list, ncol=2, nrow=2)
 ```
 
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/independent_var_control.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list, ncol=2, nrow=2)
+dev.off()
+```
+
+
 ```{r, fig.height=5, fig.width=5}
 vars_exp <- c(
   'dog_was_acquired_pre_adolescent',
@@ -531,6 +559,14 @@ for (i in 1:length(vars_exp)) {
   plot_list[[i]] <- p
 }
 ggarrange(plotlist=plot_list, ncol=3, nrow=4)
+```
+
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/independent_var_exp.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list, ncol=3, nrow=4)
+dev.off()
 ```
 
 ### Dependent Variables
@@ -564,6 +600,15 @@ for (i in 1:length(outcomes_control)) {
 ggarrange(plotlist=plot_list_control, ncol=4, nrow=3)
 ```
 
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/behavior_problems_barplot_control.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list_control, ncol=4, nrow=3)
+dev.off()
+```
+
+
 ```{r}
 
 outcomes_exp = outcomes_control
@@ -581,6 +626,13 @@ for (i in 1:length(outcomes_exp)) {
 ggarrange(plotlist=plot_list_exp, ncol=4, nrow=3)
 
 ```
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/behavior_problems_barplot_exp.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list_exp, ncol=4, nrow=3)
+dev.off()
+```
 
 # for the purposes of isolating the effect of adult training, 
 # create df control + exp groups combined
@@ -597,7 +649,7 @@ df_combo_all <- rbind(df_control,df_exp,df_adult_only,df_no_training)
 ```{r, fig.height=10, fig.width=5}
 
 #combined control and exp groups
-#here we know that all dogs have received pre-adolscence training, so we don't need to check
+#here we know that all dogs have received pre-adolescent training, so we don't need to check
 
 attribs <- c(
   #'dog_attended_pre_adolescent_training',
@@ -626,6 +678,15 @@ for (i in 1:length(outcomes)) {
 }
 ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
           font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
+```
+
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/training_vs_behavior_combo.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list, ncol=3, nrow=4,common.legend=TRUE,
+          font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
+dev.off()
 ```
 
 ```{r, fig.height=10, fig.width=5}
@@ -661,6 +722,16 @@ for (i in 1:length(outcomes)) {
 ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
           font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
 ```
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/training_vs_behavior_combo_nopreK.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list, ncol=3, nrow=4,common.legend=TRUE,
+          font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
+dev.off()
+```
+
+
 ```{r, fig.height=10, fig.width=5}
 
 #all responses that answered the training question
@@ -694,14 +765,25 @@ ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
           font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
 ```
 
+
+```{r} 
+#save figure
+png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/adult_training_vs_behavior_barplot_main.png",
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list, ncol=3, nrow=4,common.legend=TRUE,
+          font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
+dev.off()
+```
+
+
 ```{r, fig.height=10, fig.width=5}
 
 # Generate plots for each attribute split by a simple predictor.
 pred <- 'dog_adolescent_or_adult_training'
 attribs <- c(
-  'dog_was_acquired_pre_adolescent'
+  #'dog_was_acquired_pre_adolescent'
   #'dog_age_in_months'
-  #'dog_gender'
+  'dog_gender'
 )
 attribs <- sort(attribs)
 outcomes <- sort(outcomes)
@@ -730,16 +812,30 @@ ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
           font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
 ```
 
-#if the dog was acquired pre-adolescent, there appears to be a visible postive impact of training on a few behaviors: excessive barking, coprophagia, fear / anxiety, mounting, rolling in repulsive material, and aggression
+```{r} 
+#save figure
+#filename = "/Users/ekeller/ccbs/ccbs-study-3/figures/adult_training_vs_behavior_acquired_preK.png"
+#filename = "/Users/ekeller/ccbs/ccbs-study-3/figures/adult_training_vs_behavior_dog_age.png"
+filename = "/Users/ekeller/ccbs/ccbs-study-3/figures/adult_training_vs_behavior_dog_gender.png"
 
-#gender does not seem to have much of an affect, except for males with aggression-- males who have not received adult training are far more likely to show aggression 
+png(file=filename,
+width=12, height=8, units="in", res=300)
+ggarrange(plotlist=plot_list, ncol=3, nrow=4,common.legend=TRUE,
+          font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
+dev.off()
+```
+
+
+#if the dog was acquired pre-adolescent, there appears to be some postive impact of training on a few behaviors: excessive barking, coprophagia,  house soiling, repetitive behavior, and aggression
+
+#gender and age do not seem to have much of an affect 
 
 Next, we try to visual the impact (if any) of type of training
 
 ```{r, fig.height=10, fig.width=5}
 
-#df_exp_all <- df_combo_all %>%
-#  filter(dog_adolescent_or_adult_training == TRUE)
+df_exp_all <- df_combo_all %>%
+  filter(dog_adolescent_or_adult_training == TRUE)
 
 attribs <- c(
   'trainer_group_classes',
