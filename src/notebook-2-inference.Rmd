@@ -146,14 +146,12 @@ df_out <- add_sig_columns(df_out)
 print(knitr::kable(df_out))
 
 ```
-There appears to be a weakly significant negative correlation between adult 
-training and some specific behaviors: fear/anxiety, house soiling, 
-repetitive behavior, aggression, and destructiveness
+There is a weakly significant negative correlation between adult 
+training and some specific behaviors: house soiling and destructiveness
 
 there is a weakly significant positive correlation with adult training and
 problematic jumping
 
-very few associations are significant if we divide dataset into preK and no preK training
 
 #check chi-squared test for comparison
 
@@ -165,7 +163,7 @@ idx <- NULL
 p_values <- NULL
 odds_ratios <- NULL 
 for (outcome in outcomes) {
-  tbl <- table(df_all[, pred], df_all[, outcome], dnn=c(pred, outcome))
+  tbl <- table(df_valid_responses[, pred], df_valid_responses[, outcome], dnn=c(pred, outcome))
   chisq <- chisq.test(tbl)
   idx <- c(idx, outcome)
   p_values <- c(p_values, chisq$p.value)
@@ -211,7 +209,7 @@ Let's consider what other factors may also come in to play:
 
 - Dog Age
 - Dog Sex
-- Acquisition of the dog pre-adolescent
+- Acquiring the dog pre-adolescent
 - Pre-adolescent training
 
 We'll perform logistic regression to determine the impact of these factors. To
@@ -262,7 +260,7 @@ for (outcome in outcomes) {
   cat(paste0('\n', outcome, '\n'))
   f <- as.formula(paste0(outcome, '~', '.'))
   
-  df_tmp <- df_all[,c(outcome, pred, glm_attribs)]
+  df_tmp <- df_valid_responses[,c(outcome, pred, glm_attribs)]
   #do not apply min function-- this only excludes age, which is continuous
   #df_tmp <- apply_min_xtab(df_tmp, outcome) 
   
@@ -289,7 +287,7 @@ First, we isolate the experimental group (those who attended adolescent/adult
 training) into their own data set.
 
 ```{r}
-df_exp_all <- df_all %>%
+df_exp_all <- df_valid_responses %>%
   filter(dog_adolescent_or_adult_training == TRUE)
 summary(df_exp_all)
 ```
