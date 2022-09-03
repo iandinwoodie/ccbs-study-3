@@ -885,7 +885,7 @@ for (i in 1:length(outcomes)) {
   outcome <- outcomes[i]
   for (j in 1:length(attribs)) {
     attrib <- attribs[j]
-    p <- df_exp_all %>%
+    p <- df_combo_all %>%
       drop_na(attrib) %>%
       select(attrib, outcome) %>%
       ggplot(aes_string(x=attrib, fill=outcome)) +
