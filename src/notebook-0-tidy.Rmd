@@ -97,26 +97,26 @@ df_adj_dtypes <- df
 #separate training style, both pre-adolescent and adult, into reward-only or not (discipline + mixed)
 df_adj_dtypes <- df_adj_dtypes %>%
   mutate(reward_only_adult_training = ifelse(
-    (is.na(dog_adolescent_or_adult_training_style) | 
+    (dog_adolescent_or_adult_training_style == "" | 
       dog_adolescent_or_adult_training_style == 'I don\'t know'), NA, ifelse(
       dog_adolescent_or_adult_training_style == 'Reward based', TRUE, FALSE)))
 
 df_adj_dtypes <- df_adj_dtypes %>%
   mutate(discipline_or_mixed_adult_training = ifelse(
-    (is.na(dog_adolescent_or_adult_training_style) |
+    (dog_adolescent_or_adult_training_style == "" |
       dog_adolescent_or_adult_training_style == 'I don\'t know'), NA, ifelse(
       dog_adolescent_or_adult_training_style == 'Discipline based' | 
         dog_adolescent_or_adult_training_style == 'Mixed balance of both reward and discipline', TRUE, FALSE)))
 
 df_adj_dtypes <- df_adj_dtypes %>%
   mutate(reward_only_puppy_training = ifelse(
-    (is.na(dog_pre_adolescent_training_type) | 
+    (dog_pre_adolescent_training_type == "" | 
       dog_pre_adolescent_training_type == 'I don\'t know'), NA, ifelse(
       dog_pre_adolescent_training_type == 'Reward based', TRUE, FALSE)))
 
 df_adj_dtypes <- df_adj_dtypes %>%
   mutate(discipline_or_mixed_puppy_training = ifelse(
-    (is.na(dog_pre_adolescent_training_type) |
+    (dog_pre_adolescent_training_type == "" |
       dog_pre_adolescent_training_type == 'I don\'t know'), NA, ifelse(
       dog_pre_adolescent_training_type == 'Discipline based' | 
         dog_pre_adolescent_training_type == 'Mixed balance of both reward and discipline', TRUE, FALSE)))
