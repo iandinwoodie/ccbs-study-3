@@ -93,6 +93,7 @@ summary(df_valid_responses)
 
 #summary(df[df$dog_adolescent_or_adult_training==TRUE | df$dog_adolescent_or_adult_training==FALSE,])
 
+#number of dogs which report continued training
 length(which(df_valid_responses$training_complete_age_continue_in_home==TRUE | df_valid_responses$training_complete_age_continue_classes==TRUE))
 
 ```
@@ -251,46 +252,52 @@ We want to isolate the effect of adolescent / adult training
     control group: those who had pre-adolescent training but no further training
     exp group: those with pre-adolescent training and adolescent and/or adult training
 
-```{r}
-df_control <- subset(df, dog_attended_pre_adolescent_training==TRUE & dog_adolescent_or_adult_training==FALSE)
-df_exp <- subset(df, dog_attended_pre_adolescent_training==TRUE & dog_adolescent_or_adult_training==TRUE)
+```{r} 
+#testing some different groupings of the data
+
+#separate by puppy training
+df_control_puppy_training_only <- subset(df, dog_attended_pre_adolescent_training==TRUE & dog_adolescent_or_adult_training==FALSE)
+df_exp_puppy_and_adult_training <- subset(df, dog_attended_pre_adolescent_training==TRUE & dog_adolescent_or_adult_training==TRUE)
 df_adult_only <- subset(df, dog_attended_pre_adolescent_training==FALSE & dog_adolescent_or_adult_training==TRUE)
 df_no_training <- subset(df, dog_attended_pre_adolescent_training==FALSE & dog_adolescent_or_adult_training==FALSE)
 
-nrow(df_control) + nrow(df_exp) + nrow(df_adult_only) + nrow(df_no_training)
+nrow(df_control_puppy_training_only) + nrow(df_exp_puppy_and_adult_training) + nrow(df_adult_only) + nrow(df_no_training)
 
 #subset of data with dogs that continue training
 df_continue_training <- subset(df, training_complete_age_continue_in_home==TRUE | training_complete_age_continue_classes==TRUE)
 
 #subset of data to eliminate dogs that received some discipline-based training
-df_reward_only_training <- subset(df, reward_only_adult_training==TRUE | dog_adolescent_or_adult_training==FALSE)
+df_reward_only_training <- subset(df_valid_responses, reward_only_adult_training==TRUE)
+df_control_no_adult_training <- subset(df_valid_responses, dog_adolescent_or_adult_training==FALSE)
 
-nrow(subset(df_reward_only_training, reward_only_adult_training==TRUE))
-nrow(subset(df_reward_only_training, dog_adolescent_or_adult_training==FALSE))
+nrow(subset(df_reward_only_training))
+nrow(subset(df_control_no_adult_training))
 
 ```
 
 Including the effect of pre-adolescent training:
 Of the 1011 total survey responses, 452 are excluded because they did not answer whether the dog had received pre-adolescent training and/or adult training. This leaves 559 responses. The breakdown of the group:
 
-177 had no training (neither pre-adolescent or adult)
+177 had NO training (neither pre-adolescent or adult)
 37 had pre-adolescent but no further training
-223 had pre-adolescent and adult training
-122 had no pre-adolescent training but did have adult training
+223 had pre-adolescent AND adult training
+122 had NO pre-adolescent training but did have adult training
 
 
-Looking at reward-only based training vs. no training (eliminating dogs that had received any discipline-based training):
+Looking at reward-only based training vs. no training (eliminating dogs that had received discipline-based or mixed discipline and reward training):
 605 responses in dataset
-358 received reward-only training (experiment)
+358 received reward-only adult training (experiment)
 247 did not receive adult training (control)
 
+
 ```{r}
+
 # how many of dogs with behavior problems have had pre-adolescent training but no further training?
-ggplot(df_control, aes(x = behav_problem)) +
+ggplot(df_control_puppy_training_only, aes(x = behav_problem)) +
   geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
 
 # how many of dogs with behavior problems have had pre-adolescent training and adult training?
-ggplot(df_exp, aes(x = behav_problem)) +
+ggplot(df_exp_puppy_and_adult_training, aes(x = behav_problem)) +
   geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
 
 # how many of dogs with behavior problems have had no training?
@@ -302,7 +309,7 @@ ggplot(df_adult_only, aes(x = behav_problem)) +
   geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
 
 ```
-# small sample problem? too many dogs have at least one behavior problem
+# small sample problem? almost all dogs have at least one behavior problem
 
 control group: 1 no behavior problem, 36 yes 
 exp group: 9 no, 214 yes 
@@ -310,7 +317,7 @@ no training: 6 no, 171 yes
 only adult training: 1 no, 121 yes 
 
 ```{r, fig.height=5, fig.width=5}
-df %>%
+df_valid_responses %>%
   ggpairs(columns=c('dog_attended_pre_adolescent_training', 'dog_adolescent_or_adult_training', 
                     'dog_gender','dog_was_acquired_pre_adolescent', 'dog_age_in_months', 
                     'owner_gender'),
@@ -321,27 +328,27 @@ df %>%
           progress=FALSE) +
   theme(legend.position='bottom')
 ```
-There are too few dogs without behavior issues to draw any conclusions from this figure
+There are too few dogs without behavior issues to draw any conclusions 
 
 Create column indicating whether the dog had any type of training (preadolescent or adult)
 
 ```{r}
 
-df <- df %>%
+df_valid_responses <- df_valid_responses %>%
   mutate(any_training = ifelse(
     dog_attended_pre_adolescent_training | dog_adolescent_or_adult_training & !is.na(dog_attended_pre_adolescent_training), 
     TRUE, FALSE))
-summary(df$any_training)
+summary(df_valid_responses$any_training)
 ```
 
 How many dogs have behaviour problems with no vs. some training?
 
 ```{r}
 
-ggplot(data = df) +  
+ggplot(data = df_valid_responses) +  
        geom_count(mapping = aes(x = any_training, y = behav_problem))
 
-df %>% 
+df_valid_responses %>% 
   count(any_training, behav_problem) %>%  
   ggplot(mapping = aes(x = any_training, y = behav_problem)) +
     geom_tile(mapping = aes(fill = n))
@@ -353,11 +360,11 @@ df %>%
 #nrow(df[df$any_training == FALSE & df$behav_problem == FALSE, ])
 #nrow(df[df$any_training == FALSE & df$behav_problem == TRUE, ])
 
-df1 = subset(df, any_training == FALSE & behav_problem == FALSE)
-df2 = subset(df, any_training == FALSE & behav_problem == TRUE)
+df1 = subset(df_valid_responses, any_training == FALSE & behav_problem == FALSE)
+df2 = subset(df_valid_responses, any_training == FALSE & behav_problem == TRUE)
 
-df3 = subset(df, any_training == TRUE & behav_problem == FALSE)
-df4 = subset(df, any_training == TRUE & behav_problem == TRUE)
+df3 = subset(df_valid_responses, any_training == TRUE & behav_problem == FALSE)
+df4 = subset(df_valid_responses, any_training == TRUE & behav_problem == TRUE)
 
 ```
 
@@ -368,8 +375,9 @@ df4 = subset(df, any_training == TRUE & behav_problem == TRUE)
 
 (Most dogs in the study have at least one behavior problem)
 
+
 ```{r, fig.height=5, fig.width=5}
-df %>%
+df_valid_responses %>%
   ggpairs(columns=c('any_training', 'dog_adolescent_or_adult_training', 
                     'dog_attended_pre_adolescent_training'),
           mapping=ggplot2::aes(color=behav_problem),
@@ -384,7 +392,7 @@ df %>%
 
 ```{r}
 
-ggplot(df, aes(num_behv_problems)) + geom_bar(fill='steelblue')
+ggplot(df_valid_responses, aes(num_behv_problems)) + geom_bar(fill='steelblue')
 
 ```
 the majority of dogs with behavior problems have more than one (2-4)
@@ -392,7 +400,7 @@ the majority of dogs with behavior problems have more than one (2-4)
 #visualise continuous variables (dog age and num of behavior problems)
 
 ```{r}
-df %>%
+df_valid_responses %>%
   ggpairs(columns=c('dog_age_in_months', 
                     'num_behv_problems'),
           mapping=ggplot2::aes(color=dog_attended_pre_adolescent_training),
@@ -403,7 +411,7 @@ df %>%
   theme(legend.position='bottom')
 
 
-df %>%
+df_valid_responses %>%
   ggpairs(columns=c('dog_age_in_months', 
                     'num_behv_problems'),
           mapping=ggplot2::aes(color=dog_adolescent_or_adult_training),
@@ -438,7 +446,7 @@ vars <- c(
 plot_list <- list()
 for (i in 1:length(vars)) {
   col <- vars[i]
-  p <- df %>%
+  p <- df_valid_responses %>%
     select(col) %>%
     drop_na(col) %>%
     ggplot(aes_string(x = col)) +
@@ -446,6 +454,7 @@ for (i in 1:length(vars)) {
   plot_list[[i]] <- p
 }
 ggarrange(plotlist=plot_list, ncol=3, nrow=4)
+
 ```
 ```{r} 
 #save figure
@@ -476,7 +485,7 @@ outcomes <- c(
 plot_list <- list()
 for (i in 1:length(outcomes)) {
   col <- outcomes[i]
-  p <- df %>%
+  p <- df_valid_responses %>%
     select(col) %>%
     drop_na(col) %>%
     ggplot(aes_string(x = col)) +
@@ -485,6 +494,7 @@ for (i in 1:length(outcomes)) {
 }
 ggarrange(plotlist=plot_list, ncol=4, nrow=3)
 ```
+
 ```{r} 
 #save figure
 png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/behavior_problems_barplot.png",
@@ -493,7 +503,7 @@ ggarrange(plotlist=plot_list, ncol=3, nrow=4)
 dev.off()
 ```
 
-## Control vs Experimental Group
+## Control for puppy training
 
 Our control group consists of the dogs who attended puppy training but no further training and our
 experimental group consists of those who attended both puppy and adolescent/adult training.
@@ -509,11 +519,11 @@ training techniques on behavior problem occurrence. We
 start by isolating the experimental group.
 
 ```{r}
-summary(df_control)
+summary(df_control_puppy_training_only)
 ```
 
 ```{r}
-summary(df_exp)
+summary(df_exp_puppy_and_adult_training)
 ```
 Now we look at the impact of training age.
 
@@ -537,7 +547,7 @@ vars_control <- c(
 plot_list <- list()
 for (i in 1:length(vars_control)) {
   col <- vars_control[i]
-  p <- df_control %>%
+  p <- df_control_puppy_training_only %>%
     select(col) %>%
     drop_na(col) %>%
     ggplot(aes_string(x = col)) +
@@ -574,7 +584,7 @@ vars_exp <- c(
 plot_list <- list()
 for (i in 1:length(vars_exp)) {
   col <- vars_exp[i]
-  p <- df_exp %>%
+  p <- df_exp_puppy_and_adult_training %>%
     select(col) %>%
     drop_na(col) %>%
     ggplot(aes_string(x = col)) +
@@ -613,7 +623,7 @@ outcomes_control <- c(
 plot_list_control <- list()
 for (i in 1:length(outcomes_control)) {
   col <- outcomes_control[i]
-  p <- df_control %>%
+  p <- df_control_puppy_training_only %>%
     select(col) %>%
     drop_na(col) %>%
     ggplot(aes_string(x = col)) +
@@ -639,7 +649,7 @@ outcomes_exp = outcomes_control
 plot_list_exp <- list()
 for (i in 1:length(outcomes_exp)) {
   col <- outcomes_exp[i]
-  p <- df_exp %>%
+  p <- df_exp_puppy_and_adult_training %>%
     select(col) %>%
     drop_na(col) %>%
     ggplot(aes_string(x = col)) +
@@ -663,9 +673,9 @@ dev.off()
 
 ```{r}
 
-df_combo_preK_training <- rbind(df_control,df_exp)
+df_combo_preK_training <- rbind(df_control_puppy_training_only,df_exp_puppy_and_adult_training)
 df_combo_no_preK_training <- rbind(df_adult_only,df_no_training)
-df_combo_all <- rbind(df_control,df_exp,df_adult_only,df_no_training)
+df_combo_all <- rbind(df_control_puppy_training_only,df_exp_puppy_and_adult_training,df_adult_only,df_no_training)
 
 ```
 
@@ -745,6 +755,7 @@ for (i in 1:length(outcomes)) {
 ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
           font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
 ```
+
 ```{r} 
 #save figure
 png(file="/Users/ekeller/ccbs/ccbs-study-3/figures/training_vs_behavior_combo_nopreK.png",
@@ -853,11 +864,15 @@ dev.off()
 
 #gender and age do not seem to have much of an affect 
 
+
 Next, we try to visual the impact (if any) of type of training
+
+1. Examine whole group
+2. Isolate group that has received reward-based training only vs. no adult training
 
 ```{r, fig.height=10, fig.width=5}
 
-df_exp_all <- df_combo_all %>%
+df_exp_all <- df_valid_responses %>%
   filter(dog_adolescent_or_adult_training == TRUE)
 
 attribs <- c(
@@ -893,36 +908,23 @@ ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
 
 ```{r, fig.height=10, fig.width=5}
 
-df_exp_all <- df_combo_all %>%
-  filter(dog_adolescent_or_adult_training == TRUE)
+df_exp_reward <- df_valid_responses %>%
+  filter(reward_only_adult_training == TRUE)
 
-attribs <- c(
-  'trainer_group_classes',
-  'trainer_boot_camp',
-  'trainer_home_private'
-)
+outcomes_exp = outcomes_control
 
-plot_list <- list()
-cnt <- 1
-labels <- NULL
-for (i in 1:length(outcomes)) {
-  outcome <- outcomes[i]
-  for (j in 1:length(attribs)) {
-    attrib <- attribs[j]
-    p <- df_exp_all %>%
-      drop_na(attrib) %>%
-      select(attrib, outcome) %>%
-      ggplot(aes_string(x=attrib, fill=outcome)) +
-      geom_bar(position = position_dodge(0.9)) +
-      labs(fill='has this behavior problem') +
-      theme(legend.position='none')
-    plot_list[[cnt]] <- p
-    cnt <- cnt + 1
-    labels <- c(labels, outcome)
-  }
+plot_list_exp <- list()
+for (i in 1:length(outcomes_exp)) {
+  col <- outcomes_exp[i]
+  p <- df_exp_reward %>%
+    select(col) %>%
+    drop_na(col) %>%
+    ggplot(aes_string(x = col)) +
+    geom_bar(fill='steelblue')
+  plot_list_exp[[i]] <- p
 }
-ggarrange(plotlist=plot_list, ncol=3, nrow=4, common.legend=TRUE,
-          font.label=list(size=10), vjust=0.75, legend='bottom', labels=labels)
+ggarrange(plotlist=plot_list_exp, ncol=4, nrow=3)
+
 ```
 most dogs attended group classes, making the effect of location of training hard to discern
 
@@ -963,11 +965,19 @@ ggarrange(plotlist=plot_list, ncol=4, nrow=9, common.legend=TRUE,
 
 ```{r}
 
-#save datasets separated by pre-adolescent training status
-saveRDS(df_control, '../data/df_control.Rds')
-saveRDS(df_exp, '../data/df_exp.Rds')
+#save all valid responses as dataset
+saveRDS(df_valid_responses, '../data/df_valid_responses.Rds')
+
+#save datasets separated by pre-adolescent training status 
+saveRDS(df_control_puppy_training_only, '../data/df_control_puppy_training_only.Rds')
+saveRDS(df_exp_puppy_and_adult_training, '../data/df_exp_puppy_and_adult_training.Rds')
 saveRDS(df_no_training, '../data/df_no_training.Rds')
 saveRDS(df_adult_only, '../data/df_adult_only.Rds')
+
+
+#save datasets separated by training style 
+saveRDS(df_exp_reward, '../data/df_exp_reward.Rds')
+saveRDS(df_control_no_adult_training,'../data/df_control_no_adult_training.Rds')
 
 
 ```
