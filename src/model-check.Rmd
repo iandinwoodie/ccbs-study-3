@@ -1,0 +1,265 @@
+---
+title: "Model Check Example"
+author: "Ian Dinwoodie"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(tidymodels)
+#library(MASS)
+library(caret)
+library(car)
+library(performance)
+
+knitr::opts_chunk$set(echo=TRUE)
+set.seed(1)
+```
+
+```{r}
+# Create df here.
+
+df <- readRDS('../data/df_valid_responses.Rds')
+dim(df)
+summary(df)
+
+```
+
+Check for near-zero variance variables.
+
+```{r}
+(nzv_metrics <- caret::nearZeroVar(df, saveMetrics=TRUE))
+nzv_cnt <- sum(nzv_metrics$nzv)
+print(paste("Warning:", nzv_cnt, "near-zero variance vars. found"))
+if (nzv_cnt) {
+  print(colnames(df[, nzv_metrics$nzv]))
+}
+```
+
+Check for linearly correlated predictors and outcomes.
+
+define outcomes: behavior problems
+
+```{r}
+outcomes <- c(
+  'dog_was_aggressive',
+  'dog_has_fear_or_anxiety',
+  'dog_has_jumped_problematically',
+  'dog_has_barked_excessively',
+  'dog_has_coprophagia',
+  'dog_has_repetitive_behavior',
+  'dog_has_house_soiled',
+  'dog_has_rolled_in_repulsive_material',
+  'dog_was_hyperactive',
+  'dog_was_destructive',
+  'dog_has_escaped',
+  'dog_has_mounted'
+)
+outcomes <- sort(outcomes)
+
+
+pred <- c('dog_adolescent_or_adult_training',
+  'dog_age_in_months',
+  #'dog_gender',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training'
+)
+
+```
+
+```{r}
+
+#subset columns of predictors
+df_tmp <- select(df,all_of(pred))
+
+#first remove rows that contain NA's 
+df_tmp <- na.omit(df_tmp)
+
+#combo_info <- caret::findLinearCombos(df %>% dplyr::select(all_of(pred)))
+combo_info <- caret::findLinearCombos(df_tmp)
+combo_cnt <- length(combo_info$remove)
+print(paste("Linearly corr. combos vars to examine:", combo_cnt))
+print(paste("Warning:", combo_cnt, "linearly corr. combos vars. found"))
+if (combo_cnt) {
+  print(colnames(df)[combo_info$remove])
+}
+
+
+#subset columns of outcomes
+df_tmp <- select(df,all_of(outcomes))
+
+#first remove rows that contain NA's 
+df_tmp <- na.omit(df_tmp)
+
+#combo_info <- caret::findLinearCombos(df %>% dplyr::select(all_of(pred)))
+combo_info <- caret::findLinearCombos(df_tmp)
+combo_cnt <- length(combo_info$remove)
+print(paste("Linearly corr. combos vars to examine:", combo_cnt))
+print(paste("Warning:", combo_cnt, "linearly corr. combos vars. found"))
+if (combo_cnt) {
+  print(colnames(df)[combo_info$remove])
+}
+
+```
+
+# no linearly correlated predictors or outcomes found
+
+
+# Models
+
+## Null Model
+
+```{r}
+
+for (outcome in outcomes) {
+  
+  cat(paste(replicate(80, '-'), collapse=''))
+  cat(paste0('\n', outcome, '\n'))
+  f <- as.formula(paste0(outcome, '~', '1'))
+  
+  print(outcome)
+  glm_fit_null <- glm(f, data=df, family="binomial")
+  print(summary(glm_fit_null))
+
+  print(r2_null <- performance::r2_nagelkerke(glm_fit_null))
+}
+  
+```
+
+## Background Variables
+
+```{r}
+# Create df_back here.
+
+glm_attribs <- c(
+  'dog_age_in_months',
+  'dog_gender',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training'
+)
+
+#use single factor, reward or no
+training_style <- c(
+  'reward'
+  #'discipline',
+  #'mixed_style'
+)
+training_age <- c(
+  'training_complete_age_6_to_18mo',
+  'training_complete_age_18_to_36mo',
+  'training_complete_age_continue_in_home',
+  'training_complete_age_continue_classes'
+)
+training_location <- c(
+  'trainer_group_classes',
+  'trainer_boot_camp',
+  'trainer_home_private'
+)
+
+glm_attribs <- c(
+  glm_attribs,
+  training_style,
+  training_age,
+  training_location
+)
+
+df_back <- subset
+
+
+
+```
+
+```{r}
+set.seed(1)
+glm_fit_back <- glm(outcome ~ ., df_back, family="binomial")
+summary(glm_fit_back)
+
+get_performance_metrics <- function(fit, r2_prev) {
+  r2_curr = performance::r2_nagelkerke(fit)
+  print(r2_curr)
+  print(paste("Delta R^2:", r2_curr-r2_prev))
+  print(performance::performance_hosmer(fit))
+  return(r2_curr)
+}
+
+r2_back <- get_performance_metrics(glm_fit_back, r2_null)
+```
+
+```{r}
+(vif(glm_fit_back))
+```
+
+```{r}
+bs_table <- function(fit, data) {
+  df_results <- broom::tidy(fit, conf.int=TRUE, exponentiate=TRUE)
+  
+  glm_est <- function(split, ...) {
+    glm(fit$formula, data = rsample::analysis(split), family="binomial") %>%
+      tidy()
+  }
+  
+  set.seed(1)
+  conf_ints <- rsample::bootstraps(data, 10000, apparent = TRUE) %>%
+    dplyr::mutate(results = map(splits, glm_est)) %>%
+    rsample::int_bca(results, .fn = glm_est) %>%
+    dplyr::mutate_at(c(".estimate", ".lower", ".upper"), ~ exp(.)) %>%
+    dplyr::select(term, .lower, .upper) %>%
+    dplyr::rename(bs.low=.lower, bs.high=.upper)
+  
+  df_results <- merge(df_results, conf_ints, by="term")
+  df_results$p.value <- p.adjust(df_results$p.value, method='fdr')
+  df_results$sig <- ''
+  df_results[df_results$p.value <= .05, 'sig'] <- '*'
+  df_results[df_results$p.value <= .01, 'sig'] <- '**'
+  df_results[df_results$p.value <= .001, 'sig'] <- '***'
+  for (i in 1:nrow(df_results)) {
+    if (is.na(df_results[i, 'bs.low']) | is.na(df_results[i, 'bs.high'])) next
+    if ((df_results[i, 'bs.low'] <= 1) & (df_results[i, 'bs.high'] >= 1)) {
+      df_results[i, 'sig'] <- ''
+    }
+  }
+  df_results <- df_results %>%
+    dplyr::mutate(dplyr::across(where(is.numeric), round, 3))
+  return(knitr::kable(df_results))
+}
+
+bs_table(glm_fit_back, df_back)
+```
+
+```{r}
+anova(glm_fit_null, glm_fit_back, test="LRT")
+```
+
+## Adoption Source
+
+```{r}
+# Create df_source here.
+```
+
+```{r}
+set.seed(1)
+glm_fit_source <- glm(outcome ~ ., df_source, family="binomial")
+summary(glm_fit_source)
+
+r2_source <- get_performance_metrics(glm_fit_source, r2_back)
+```
+
+```{r}
+(vif(glm_fit_source))
+```
+
+```{r}
+bs_table(glm_fit_source, df_source)
+```
+
+```{r}
+anova(glm_fit_back, glm_fit_source, test="LRT")
+```
+
+# Save Session Info
+
+```{r}
+sessionInfo()
+```
+

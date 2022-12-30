@@ -10,6 +10,8 @@ output:
 library(tidyverse)
 library(ggpubr)
 library(GGally)
+library(moments)
+library(scales)
 knitr::opts_chunk$set(echo=TRUE)
 ```
 
@@ -84,17 +86,76 @@ summary(df$num_behv_problems)
   
 ```
 
-#summary stats specific to included responses (valid response = True or False to dog_adolescent_or_adult_training, no NA's)
+# Summary stats specific to only valid responses which meet the inclusion criteria (valid response = dog > 12 months of age, answered True or False to dog_adolescent_or_adult_training)
 
 ```{r}
 
 df_valid_responses <- subset(df, dog_adolescent_or_adult_training==TRUE | dog_adolescent_or_adult_training==FALSE)
 summary(df_valid_responses)
 
-#summary(df[df$dog_adolescent_or_adult_training==TRUE | df$dog_adolescent_or_adult_training==FALSE,])
+```
+
+```{r}
+
+#summary of number of behavior problems 
+summary(df_valid_responses$num_behv_problems)
 
 #number of dogs which report continued training
 length(which(df_valid_responses$training_complete_age_continue_in_home==TRUE | df_valid_responses$training_complete_age_continue_classes==TRUE))
+
+```
+
+
+#look at distribution of number of behavior problems
+
+```{r}
+
+p <- ggplot(df_valid_responses, aes(x=as.character(num_behv_problems))) + geom_bar(fill='steelblue') + geom_text(aes(label = ..count..), stat = "count", vjust = 1.1, colour = "white")
+
+p.labs <- p + labs(x = "Number of behavior problems")# , y = "Y-AXIS TITLE")
+p.labs
+
+```
+
+#calculate percentage of dogs with each behavior problem
+
+```{r}
+
+behav_probs <- c(
+  'dog_was_aggressive',
+  'dog_has_fear_or_anxiety',
+  'dog_has_jumped_problematically',
+  'dog_has_barked_excessively',
+  'dog_has_coprophagia',
+  'dog_has_repetitive_behavior',
+  'dog_has_house_soiled',
+  'dog_has_rolled_in_repulsive_material',
+  'dog_was_hyperactive',
+  'dog_was_destructive',
+  'dog_has_escaped',
+  'dog_has_mounted'
+)
+behav_probs <- sort(behav_probs)
+
+tmp <- df_valid_responses %>% select(all_of(behav_probs))
+
+
+
+for (behav_prob in behav_probs){
+  
+  tbl <- plyr::count(tmp, behav_prob) / nrow(tmp) * 100
+  #tmp <- tmp %>% 
+  ## add percentage label with `sprintf()`
+  perc = paste0(sprintf("%4.1f", tbl$freq[2]), "%")
+  
+}
+
+
+mpg_sum
+
+df_valid_responses %>% 
+  ## add percentage label with `scales::percent()`
+  dplyr::mutate(perc = scales::percent(n / sum(n), accuracy = .1, trim = FALSE))
 
 ```
 
@@ -127,79 +188,47 @@ length(which(df_valid_responses$training_complete_age_continue_in_home==TRUE | d
 -- 18.4% reported mounting (127/689)
 
 
-
-
 # make some plots to visualise data
 
-```{r}
-
-# how many of dogs with behavior problems have had pre-adolescent training?
-
-ggplot(df, aes(x = dog_attended_pre_adolescent_training)) +
-  geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
-
-ggplot(data = df) +  
-       geom_count(mapping = aes(x = dog_attended_pre_adolescent_training, y = behav_problem)) 
-
-df %>% 
-  # create a column called n for number of times x & y occur together
-  count(dog_attended_pre_adolescent_training, behav_problem) %>% 
-  # create columns for each unique value of y and 
-  # put the values of column n below
-  spread(key = behav_problem, value = n, fill = 0) 
-
-df %>% 
-  count(dog_attended_pre_adolescent_training, behav_problem) %>%  
-  ggplot(mapping = aes(x = dog_attended_pre_adolescent_training, y = behav_problem)) +
-    geom_tile(mapping = aes(fill = n))
-
-```
-
+How many of dogs with behavior problems have had adolescent/adult training?
 
 ```{r}
 
-# how many of dogs with behavior problems have had adolescent/adult training?
-
-ggplot(df, aes(x = dog_adolescent_or_adult_training)) +
+ggplot(df_valid_responses, aes(x = dog_adolescent_or_adult_training)) +
   geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
 
-ggplot(data = df) +  
+ggplot(data = df_valid_responses) +  
        geom_count(mapping = aes(x = dog_adolescent_or_adult_training, y = behav_problem)) 
 
-df %>% 
+df_valid_responses %>% 
   # create a column called n for number of times x & y occur together
   count(dog_adolescent_or_adult_training, behav_problem) %>% 
   # create columns for each unique value of y and 
   # put the values of column n below
   spread(key = behav_problem, value = n, fill = 0) 
 
-df %>% 
+df_valid_responses %>% 
   count(dog_adolescent_or_adult_training, behav_problem) %>%  
   ggplot(mapping = aes(x = dog_adolescent_or_adult_training, y = behav_problem)) +
     geom_tile(mapping = aes(fill = n))
 
 ```
-Of the owners/dogs that reported any behavioral problems,
 
-less than half (46.1% or 250 out of 542 responses) had attended pre-adolescent training
-more than half (62.6% or 431 out of 689) had attended adolescent or adult training
-
-there is likely an association between dogs with behavior issues and attending adolescent / adult training i.e. owners with dogs that have issues are more likely to sign up for additional training
-
-However almost all dogs had some kind of behavior problem, so it could depend on the particular behaviour or the severity of the problem (The survey did not ask about severity)
+Almost all dogs have at least one behavior problem, so this is not very meaningful
 
 
 # examine variable distribution for all variables
 
 ```{r}
-library(moments)
 
+# all responses
 ggplot(df, aes(dog_age_in_months)) + geom_bar(fill='steelblue')
 skewness(df$dog_age_in_months,na.rm=TRUE)
 
 ggplot(df, aes(owner_age)) + geom_bar(fill='steelblue')
 skewness(df$owner_age,na.rm=TRUE)
 
+#valid responses only
 ggplot(df_valid_responses, aes(dog_age_in_months)) + geom_bar(fill='steelblue')
 skewness(df_valid_responses$dog_age_in_months,na.rm=TRUE)
 
@@ -208,7 +237,7 @@ skewness(df_valid_responses$owner_age,na.rm=TRUE)
 
 ```
 
-We see a right skew in the dog age plot, and a left skew in the owner age plot. Let's try to center it by applying a log transform.
+We see a modest right skew (younger) in the dog age plot, and a left skew (older) in the owner age plot. Let's try to center it by applying a log transform.
 
 ```{r}
 df_valid_responses <- df_valid_responses %>%
@@ -225,29 +254,13 @@ skewness(df_valid_responses$log_owner_age,na.rm=TRUE)
 df_valid_responses <- subset(df_valid_responses, select=-c(log_dog_age))
 df_valid_responses <- subset(df_valid_responses, select=-c(log_owner_age))
 
-
 ```
-not helpful-- still skews with log transform
+Dog and owner age still skews with log transform -- discard this column
 
-pairwise scatter plots for columns that all participants responded
-(i.e., no NA responses), excluding the individual behavior problem
-columns for brevity.
 
-```{r, fig.height=5, fig.width=5}
-df_valid_responses %>%
-  ggpairs(columns=c('dog_attended_pre_adolescent_training', 'dog_adolescent_or_adult_training', 
-                    'dog_gender'),
-          mapping=ggplot2::aes(color=behav_problem),
-          diag=list(discrete='barDiag',
-                    continuous=wrap('densityDiag', alpha=0.5)),
-          legend=1,
-          progress=FALSE) +
-  theme(legend.position='bottom')
-```
+# We want to isolate the effect of adolescent / adult training
 
-We want to isolate the effect of adolescent / adult training
- -- using all valid answers (they answered yes or no to the training question)
-    df_valid_responses
+ -- using all valid answers which meet our inclusion criteria = df_valid_responses
  -- controlling for the fact that some dogs have also received pre-adolescent training:
     control group: those who had pre-adolescent training but no further training
     exp group: those with pre-adolescent training and adolescent and/or adult training
@@ -275,14 +288,16 @@ nrow(subset(df_control_no_adult_training))
 
 ```
 
-Including the effect of pre-adolescent training:
+# Including the effect of pre-adolescent training:
 Of the 1011 total survey responses, 452 are excluded because they did not answer whether the dog had received pre-adolescent training and/or adult training. This leaves 559 responses. The breakdown of the group:
 
 177 had NO training (neither pre-adolescent or adult)
-37 had pre-adolescent but no further training
+37 had pre-adolescent but NO further training
 223 had pre-adolescent AND adult training
 122 had NO pre-adolescent training but did have adult training
 
+
+# Controlling for the adverse impact of discipline-based training
 
 Looking at reward-only based training vs. no training (eliminating dogs that had received discipline-based or mixed discipline and reward training):
 605 responses in dataset
@@ -290,75 +305,22 @@ Looking at reward-only based training vs. no training (eliminating dogs that had
 247 did not receive adult training (control)
 
 
-```{r}
-
-# how many of dogs with behavior problems have had pre-adolescent training but no further training?
-ggplot(df_control_puppy_training_only, aes(x = behav_problem)) +
-  geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
-
-# how many of dogs with behavior problems have had pre-adolescent training and adult training?
-ggplot(df_exp_puppy_and_adult_training, aes(x = behav_problem)) +
-  geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
-
-# how many of dogs with behavior problems have had no training?
-ggplot(df_no_training, aes(x = behav_problem)) +
-  geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
-
-# how many of dogs with behavior problems have had adult training only?
-ggplot(df_adult_only, aes(x = behav_problem)) +
-  geom_bar() + geom_text(aes(label=..count..),stat='count',vjust=-0.2)
-
-```
-# small sample problem? almost all dogs have at least one behavior problem
-
-control group: 1 no behavior problem, 36 yes 
-exp group: 9 no, 214 yes 
-no training: 6 no, 171 yes 
-only adult training: 1 no, 121 yes 
-
-```{r, fig.height=5, fig.width=5}
-df_valid_responses %>%
-  ggpairs(columns=c('dog_attended_pre_adolescent_training', 'dog_adolescent_or_adult_training', 
-                    'dog_gender','dog_was_acquired_pre_adolescent', 'dog_age_in_months', 
-                    'owner_gender'),
-          mapping=ggplot2::aes(color=behav_problem),
-          diag=list(discrete='barDiag',
-                    continuous=wrap('densityDiag', alpha=0.5)),
-          legend=1,
-          progress=FALSE) +
-  theme(legend.position='bottom')
-```
-There are too few dogs without behavior issues to draw any conclusions 
-
-Create column indicating whether the dog had any type of training (preadolescent or adult)
+# How many dogs with any type of training (either puppy or adult) have behavior problems? 
 
 ```{r}
+
+# Create column indicating whether the dog had any type of training (pre-adolescent or adolescent/adult)
 
 df_valid_responses <- df_valid_responses %>%
   mutate(any_training = ifelse(
     dog_attended_pre_adolescent_training | dog_adolescent_or_adult_training & !is.na(dog_attended_pre_adolescent_training), 
     TRUE, FALSE))
 summary(df_valid_responses$any_training)
-```
-
-How many dogs have behaviour problems with no vs. some training?
-
-```{r}
-
-ggplot(data = df_valid_responses) +  
-       geom_count(mapping = aes(x = any_training, y = behav_problem))
-
-df_valid_responses %>% 
-  count(any_training, behav_problem) %>%  
-  ggplot(mapping = aes(x = any_training, y = behav_problem)) +
-    geom_tile(mapping = aes(fill = n))
-
 
 ```
 
+
 ```{r}
-#nrow(df[df$any_training == FALSE & df$behav_problem == FALSE, ])
-#nrow(df[df$any_training == FALSE & df$behav_problem == TRUE, ])
 
 df1 = subset(df_valid_responses, any_training == FALSE & behav_problem == FALSE)
 df2 = subset(df_valid_responses, any_training == FALSE & behav_problem == TRUE)
@@ -373,29 +335,22 @@ df4 = subset(df_valid_responses, any_training == TRUE & behav_problem == TRUE)
 11 dogs with some training have no behavior problems
 371 dogs with some training do have behavior problems
 
-(Most dogs in the study have at least one behavior problem)
+Again, most dogs in the study have at least one behavior problem so this is not very insightful
 
 
-```{r, fig.height=5, fig.width=5}
-df_valid_responses %>%
-  ggpairs(columns=c('any_training', 'dog_adolescent_or_adult_training', 
-                    'dog_attended_pre_adolescent_training'),
-          mapping=ggplot2::aes(color=behav_problem),
-          diag=list(discrete='barDiag',
-                    continuous=wrap('densityDiag', alpha=0.5)),
-          legend=1,
-          progress=FALSE) +
-  theme(legend.position='bottom')
 
-```
-#look at number of behavior problems
+the majority of dogs with behavior problems have between 2-5 separate behavior issues
+
+Is there a correlation between dog age and behavior problems?
 
 ```{r}
 
-ggplot(df_valid_responses, aes(num_behv_problems)) + geom_bar(fill='steelblue')
+data<-dplyr::select(df_valid_responses,num_behv_problems,dog_age_in_months)
+ggpairs(data)
 
 ```
-the majority of dogs with behavior problems have more than one (2-4)
+
+There does not appear to be a significant correlation between a dog's age and behavior problems, except perhaps at the extreme end (the dogs with 9 or 10 problems tend to be younger)
 
 #visualise continuous variables (dog age and num of behavior problems)
 
@@ -973,7 +928,6 @@ saveRDS(df_control_puppy_training_only, '../data/df_control_puppy_training_only.
 saveRDS(df_exp_puppy_and_adult_training, '../data/df_exp_puppy_and_adult_training.Rds')
 saveRDS(df_no_training, '../data/df_no_training.Rds')
 saveRDS(df_adult_only, '../data/df_adult_only.Rds')
-
 
 #save datasets separated by training style 
 saveRDS(df_exp_reward, '../data/df_exp_reward.Rds')
