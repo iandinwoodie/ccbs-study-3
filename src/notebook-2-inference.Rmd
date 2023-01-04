@@ -220,8 +220,7 @@ for (outcome in outcomes) {
   f <- as.formula(paste0(outcome, '~', '.'))
   
   df_tmp <- df_valid_responses[,c(outcome, pred)]
-  #df_tmp <- apply_min_xtab(df_tmp, outcome)
-  
+
   glm_fit <- glm(f, data=df_tmp, family='binomial')
   print(summary(glm_fit))
   print(exp(cbind(OR=coef(glm_fit), suppressMessages(confint(glm_fit)))))

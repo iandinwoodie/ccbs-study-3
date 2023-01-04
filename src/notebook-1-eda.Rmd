@@ -166,7 +166,8 @@ for (behav_prob in behav_probs){
   tbl <- plyr::count(tmp, behav_prob) / nrow(tmp) * 100
   #tmp <- tmp %>% 
   ## add percentage label with `sprintf()`
-  perc = paste0(sprintf("%4.1f", tbl$freq[2]), "%")
+  #perc = paste0(sprintf("%4.1f", tbl$freq[2]), "%")
+  perc = tbl$freq[2]
   
   pct_df[pct_df$Behavior==behav_prob,2] = perc
   
@@ -181,15 +182,26 @@ pct_df <- pct_df[order(pct_df$Occurence,decreasing = TRUE),]
 
 my_labels <- c("Excessive Barking","Coprophagia","Escaping", "Fear or Anxiety", "House soiling",               "Problematic jumping", "Mounting", "Repetitive Behavior", "Rolling in Repulsive Material", "Aggression","Destructive", "Hyperactivity" )
 
+pct_labels = paste0(sprintf("%4.1f", pct_df$Occurence), "%")
+
 df_sorted <- arrange(pct_df, Occurence) 
 
-p <- ggplot(df_sorted, aes(x=Behavior,y=Occurence)) + geom_bar(stat="identity",fill='steelblue') + scale_x_discrete(labels=my_labels) + scale_y_discrete(labels=NULL) + geom_text(aes(label = Occurence), hjust = 0, colour = "black")  + theme(axis.text=element_text(size=12),    axis.title=element_text(size=16,face="bold")) 
+p <- ggplot(pct_df, aes(x=Behavior,y=Occurence)) + geom_bar(stat="identity",fill='steelblue') + scale_x_discrete(labels=my_labels) + scale_y_continuous(limits=c(0,100)) + geom_text(aes(label = pct_labels), hjust = -0.2, colour = "black", size=5)  + theme(axis.text=element_text(size=14),    axis.title=element_text(size=16,face="bold")) 
 
-p.labs <- p + coord_flip() + labs(y = "percentage of total", ) 
+p.labs <- p + coord_flip() + labs(y = "percentage of dogs", ) 
 p.labs
 
 
 ```
+```{r} 
+#save figure
+filename="/Users/ekeller/ccbs/ccbs-study-3/figures/behavior_problems_pct.pdf"
+pdf(file=filename, width=12, height=8)
+p.labs
+dev.off()
+
+```
+
 
 # general notes on dataset: (all stats exclude no answer or NA's unless otherwise stated)
 -- 322 (out of 1011 total obs) responses are excluded due to no response (NA's) in either training or behavior questions; many of these dogs were too young to take part in the survey (<12 mo)
