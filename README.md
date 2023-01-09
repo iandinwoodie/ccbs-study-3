@@ -10,7 +10,7 @@
 
 ---
 
-Analysis repository for the paper titled _Does Adolescent and Adult Training Impact Canine Behavior Outcomes?_.
+Analysis repository for the paper titled _Does Adolescent and Adult Training Impact Canine Behavior Outcomes?_
 
 ## Project Organization
 
