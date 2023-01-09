@@ -1,6 +1,16 @@
 # ccbs-study-3
 
-An Investigation Into the Impact of Adolescent and Adult Training on Canine Behavior
+<p align="left">
+    <a href="LICENSE" alt="License">
+        <img src="https://img.shields.io/github/license/iandinwoodie/ccbs-study-3" /></a>
+    <img src="https://img.shields.io/github/repo-size/iandinwoodie/ccbs-study-3" />
+    <a href="https://github.com/iandinwoodie/ccbs-study-3/releases" alt="Latest Release">
+        <img src="https://img.shields.io/github/v/tag/iandinwoodie/ccbs-study-3" /></a>
+</p>
+
+---
+
+Analysis repository for the paper titled _Does Adolescent and Adult Training Impact Canine Behavior Outcomes?_.
 
 ## Project Organization
 
