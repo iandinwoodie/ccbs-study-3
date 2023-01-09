@@ -1,0 +1,602 @@
+---
+title: "Inferential Data Analysis"
+author: "Liz Keller"
+output: html_notebook
+date: "`r Sys.Date()`"
+
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggpubr)
+library(GGally)
+library(car)
+
+knitr::opts_chunk$set(echo=TRUE)
+
+#set.seed()
+```
+
+# Loading the Data
+
+Load the raw data and verify its dimensions and structure.
+
+```{r}
+df <- readRDS('../data/tidy.Rds')
+dim(df)
+summary(df)
+
+```
+
+# only valid responses
+
+```{r}
+df_valid_responses <- readRDS('../data/df_valid_responses.Rds')
+dim(df_valid_responses)
+summary(df_valid_responses)
+
+#derived from full dataset:
+#df_valid_responses <- subset(df, dog_adolescent_or_adult_training==TRUE | dog_adolescent_or_adult_training==FALSE)
+
+```
+
+# Control vs Experimental Groups
+
+# with all valid responses:
+control = adult training FALSE
+exp = adult training TRUE
+
+# all permutations of adult and puppy training
+control_puppy_training = puppy training but no adolescent/adult training 
+exp_puppy_and_adult_training = both adult and puppy training
+no_training = neither adult nor puppy training
+adult_only = adult training but no puppy training
+
+# using reward-only based adult training as exp
+control = adult training FALSE
+exp = reward_only_adult_training TRUE
+
+```{r}
+
+#drawing from all valid responses
+df_control <- df_valid_responses %>%
+  filter(dog_adolescent_or_adult_training == FALSE)
+dim(df_control)
+
+# only those who answered both adult and puppy training question
+df_control_puppy_training_only <- readRDS('../data/df_control_puppy_training_only.Rds')
+df_exp_puppy_and_adult_training <- readRDS('../data/df_exp_puppy_and_adult_training.Rds')
+df_no_training <- readRDS('../data/df_no_training.Rds')
+df_adult_only <- readRDS('../data/df_adult_only.Rds')
+
+dim(df_control_puppy_training_only)
+dim(df_exp_puppy_and_adult_training)
+dim(df_no_training)
+dim(df_adult_only)
+
+# only dogs that received reward-based training
+df_exp_reward <- readRDS('../data/df_reward_only_training.Rds')
+dim(df_exp_reward)
+
+
+```
+
+## Overview
+
+The first question we want to answer is if training during adolescence and/or 
+adulthood has an impact on the likelihood of a dog having certain behavior problems. 
+
+The behavior problems we are exploring are:
+
+- Aggression
+- Barking excessively
+- Coprophagia
+- Destructive behavior
+- Escaping/running away
+- Fear/anxiety
+- House soiling
+- Hyperactivity
+- Jumping problematically
+- Mounting
+- Repetitive behavior
+- Rolling in repulsive materials
+
+```{r}
+outcomes <- c(
+  'dog_was_aggressive',
+  'dog_has_fear_or_anxiety',
+  'dog_has_jumped_problematically',
+  'dog_has_barked_excessively',
+  'dog_has_coprophagia',
+  'dog_has_repetitive_behavior',
+  'dog_has_house_soiled',
+  'dog_has_rolled_in_repulsive_material',
+  'dog_was_hyperactive',
+  'dog_was_destructive',
+  'dog_has_escaped',
+  'dog_has_mounted'
+)
+outcomes <- sort(outcomes)
+```
+
+## Statistical Models
+
+We check for correlation between the predictor (attending adolescent / adult training) and
+each outcome (the presence of a specific behavior problem). 
+
+Here we perform the Fisher Exact test with a Benjamini-Hochberg correction.
+(The Fischer test is useful for categorical data where the sample size is small)
+
+```{r}
+
+pred <- 'dog_adolescent_or_adult_training'
+
+idx <- NULL
+p_values <- NULL
+odds_ratios <- NULL 
+conf_int_low <- NULL
+conf_int_high <- NULL
+
+for (outcome in outcomes) {
+  tbl <- table(df_valid_responses[, pred], df_valid_responses[, outcome], dnn=c(pred, outcome))
+  fisher <- fisher.test(tbl)
+  idx <- c(idx, outcome)
+  p_values <- c(p_values, fisher$p.value)
+  odds_ratios <- c(odds_ratios, fisher$estimate[[1]])
+  conf_int_low <- c(conf_int_low,fisher$conf.int[[1]])
+  conf_int_high <- c(conf_int_high,fisher$conf.int[[2]])
+}
+
+# Correct for the possibility of Type I errors.
+p_values <- p.adjust(p_values, method='BH')
+
+# Form a result data frame.
+df_out <- data.frame(outcome=idx, p_value=p_values,
+                     odds_ratio=odds_ratios, 
+                     conf_int1=conf_int_low, conf_int2=conf_int_high)
+
+add_sig_columns <- function(df) {
+  df$level <- ''
+  df[df$p_value <= .05, 'level'] <- '*'
+  df[df$p_value <= .01, 'level'] <- '**'
+  df[df$p_value <= .001, 'level'] <- '***'
+  
+  df$dir <- ''
+  df[df$odds_ratio < 1, 'dir'] <- '-'
+  df[df$odds_ratio > 1, 'dir'] <- '+'
+  
+  return (df)
+}
+
+df_out <- add_sig_columns(df_out)
+print(knitr::kable(df_out))
+
+```
+There is a weakly significant negative correlation between adult 
+training and some specific behaviors: house soiling and destructiveness
+
+there is a weakly significant positive correlation with adult training and
+problematic jumping
+
+
+#check chi-squared test for comparison
+
+```{r}
+
+pred <- 'dog_adolescent_or_adult_training'
+
+idx <- NULL
+p_values <- NULL
+odds_ratios <- NULL 
+for (outcome in outcomes) {
+  tbl <- table(df_valid_responses[, pred], df_valid_responses[, outcome], dnn=c(pred, outcome))
+  chisq <- chisq.test(tbl)
+  idx <- c(idx, outcome)
+  p_values <- c(p_values, chisq$p.value)
+  #odds_ratios <- c(odds_ratios, chisq$estimate[[1]])
+}
+
+# Correct for the possibility of Type I errors (false positive/discovery rate).
+p_values <- p.adjust(p_values, method='BH')
+
+# Form a result data frame.
+df_out_chisq <- data.frame(outcome=idx, p_value=p_values)
+
+df_out_chisq <- add_sig_columns(df_out_chisq)
+print(knitr::kable(df_out_chisq))
+
+```
+Result: same variables are of same order of significance with chi squared test
+
+
+## Binary Logistic Regression
+
+```{r}
+pred <- 'dog_adolescent_or_adult_training'
+
+for (outcome in outcomes) {
+  cat(paste(replicate(80, '-'), collapse=''))
+  cat(paste0('\n', outcome, '\n'))
+  f <- as.formula(paste0(outcome, '~', '.'))
+  
+  df_tmp <- df_valid_responses[,c(outcome, pred)]
+
+  glm_fit <- glm(f, data=df_tmp, family='binomial')
+  print(summary(glm_fit))
+  print(exp(cbind(OR=coef(glm_fit), suppressMessages(confint(glm_fit)))))
+  #cat('\nVIF:\n')
+  #print(car::vif(glm_fit))
+  cat('\n')
+}
+```
+
+Let's consider what other factors may also come in to play:
+
+- Dog Age
+- Dog Sex
+- Acquiring the dog pre-adolescent
+- Pre-adolescent training
+
+We'll perform logistic regression to determine the impact of these factors. To
+perform logistic regression we'll need to ensure out data subsets have enough
+responses (`n >= 10`) for each possible answer to be included in the model.
+
+```{r}
+apply_min_xtab <- function(df, outcome, cutoff=10)
+{
+  drops <- NULL
+  for (col in names(df)) {
+    if (col == outcome) next
+    if (is.integer(df[,col])) next
+    if (is.numeric(df[,col])) next # added in order not to exclude dog age
+    
+    xtab <- table(df[,col], df[,outcome])
+    if (min(xtab) < cutoff) {
+      drops <- c(drops, col)
+      break
+    }
+  }
+  
+  if (length(drops) > 0) {
+    cat('\nDropped from model due to insufficient responses:\n')
+    cat(drops)
+    cat('\n')
+  }
+  
+  return(df[, !(names(df) %in% drops)])
+}
+```
+
+Now we perform the logistic regression.
+
+when including age (the only continuous variable)
+do not apply exclusion for min number of responses 
+
+```{r}
+pred <- 'dog_adolescent_or_adult_training'
+glm_attribs <- c(
+  'dog_age_in_months',
+  'dog_gender',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training'
+)
+for (outcome in outcomes) {
+  cat(paste(replicate(80, '-'), collapse=''))
+  cat(paste0('\n', outcome, '\n'))
+  f <- as.formula(paste0(outcome, '~', '.'))
+  
+  df_tmp <- df_valid_responses[,c(outcome, pred, glm_attribs)]
+  #do not apply min function-- this only excludes age, which is continuous
+  #df_tmp <- apply_min_xtab(df_tmp, outcome) 
+  
+  glm_fit <- glm(f, data=df_tmp, family='binomial')
+  print(summary(glm_fit))
+  print(exp(cbind(OR=coef(glm_fit), suppressMessages(confint(glm_fit)))))
+  cat('\nVIF:\n')
+  print(car::vif(glm_fit))
+  cat('\n')
+}
+
+#car::vif(model) above 10 (above 5 is red flag)
+```
+
+
+# Investigating Training Specifics
+
+we have identified that adolescent/adult training has a marginally 
+significant impact on some behavior problems. 
+Now we want to investigate the impact of certain
+training factors.
+
+## Isolating the Experimental Data Set
+
+First, we isolate the experimental group (those who attended adolescent/adult
+training) into their own data set.
+
+```{r}
+df_exp_all <- df_valid_responses %>%
+  filter(dog_adolescent_or_adult_training == TRUE)
+summary(df_exp_all)
+```
+#add some factors for training style
+```{r}
+df_exp_all <- df_exp_all %>%
+  mutate(reward = ifelse(
+    (is.na(dog_adolescent_or_adult_training_style) | 
+      dog_adolescent_or_adult_training_style == 'I don\'t know'), NA, ifelse(
+      dog_adolescent_or_adult_training_style == 'Reward based', TRUE, FALSE)))
+
+df_exp_all <- df_exp_all %>%
+  mutate(discipline = ifelse(
+    (is.na(dog_adolescent_or_adult_training_style) |
+      dog_adolescent_or_adult_training_style == 'I don\'t know'), NA, ifelse(
+      dog_adolescent_or_adult_training_style == 'Discipline based', TRUE, FALSE)))
+
+df_exp_all <- df_exp_all %>%
+  mutate(mixed_style = ifelse(
+    (is.na(dog_adolescent_or_adult_training_style) |
+      dog_adolescent_or_adult_training_style == 'I don\'t know'), NA, ifelse(
+      dog_adolescent_or_adult_training_style == 'Mixed balance of both reward and discipline', TRUE, FALSE)))
+```
+
+## Binary Logistic Regression
+
+We want to answer the following questions about the training:
+
+- Does continued training throughout dog's life produce a better outcome? 
+- Did training technique (reward vs. punishment) have an impact on the outcome?
+- Did the location of training have an impact on the outcome?
+
+We will need to expand the independent variables used for the model to answer
+these questions.
+
+(The vast majority of dogs who had adolescent/adult training received 
+reward-based training at group classes)
+
+```{r}
+
+outcomes_sig <- c(
+  'dog_was_aggressive',
+  'dog_has_fear_or_anxiety',
+  'dog_has_jumped_problematically',
+  'dog_has_barked_excessively',
+  'dog_has_coprophagia',
+  'dog_has_repetitive_behavior',
+  'dog_has_house_soiled',
+  'dog_has_rolled_in_repulsive_material',
+  'dog_was_hyperactive',
+  'dog_was_destructive',
+  'dog_has_escaped',
+  'dog_has_mounted'
+)
+outcomes_sig <- sort(outcomes_sig)
+
+glm_attribs <- c(
+  'dog_age_in_months',
+  'dog_gender',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training'
+)
+
+#use single factor, reward or no
+training_style <- c(
+  'reward'
+  #'discipline',
+  #'mixed_style'
+)
+training_age <- c(
+  'training_complete_age_6_to_18mo',
+  'training_complete_age_18_to_36mo',
+  'training_complete_age_continue_in_home',
+  'training_complete_age_continue_classes'
+)
+training_location <- c(
+  'trainer_group_classes',
+  'trainer_boot_camp',
+  'trainer_home_private'
+)
+
+glm_attribs <- c(
+  glm_attribs,
+  training_style,
+  training_age,
+  training_location
+)
+
+print(glm_attribs)
+
+```
+
+Now we can build and evaluate our models for the various outcomes.
+
+
+```{r}
+
+#note that training style appears to be highly co-variate with other variables
+# when discipline and mixed style is included
+# make it binary, reward or not reward
+
+
+glm_attribs <- c(
+  #glm_attribs,
+  'dog_age_in_months',
+  'dog_gender',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training',
+  training_style
+  #training_age,
+  #training_location
+)
+
+```
+
+
+```{r}
+for (outcome in outcomes_sig) {
+  cat(paste(replicate(80, '-'), collapse=''))
+  cat(paste0('\n', outcome, '\n'))
+  f <- as.formula(paste0(outcome, '~', '.'))
+  
+  df_tmp <- df_exp_all[,c(outcome, glm_attribs)]
+  df_tmp <- apply_min_xtab(df_tmp, outcome)
+  
+  # do not apply min xtab function to dog age
+  
+  # If necessary, drop columns due to separability problems.
+  #if (outcome == 'destructive') {
+  #  df_tmp <- subset(df_tmp, select=-c(shock_collar))
+  #}
+  
+  glm_fit <- glm(f, data=df_tmp, family='binomial')
+  print(summary(glm_fit))
+  print(exp(cbind(OR=coef(glm_fit), suppressMessages(confint(glm_fit)))))
+  cat('\nVIF:\n')
+  print(car::vif(glm_fit))
+  cat('\n')
+}
+```
+There seems to be very little impact of type of training, completion age, or training location
+Pre-adolescent training was the most significant variable within the experimental group that predicts
+presence of behavior
+
+Alternate model: eliminate dogs that have received anything other than reward-only training
+
+```{r}
+
+pred <- 'dog_adolescent_or_adult_training'
+
+idx <- NULL
+p_values <- NULL
+odds_ratios <- NULL 
+for (outcome in outcomes) {
+  tbl <- table(df_combo_reward[, pred], df_combo_reward[, outcome], dnn=c(pred, outcome))
+  fisher <- fisher.test(tbl)
+  idx <- c(idx, outcome)
+  p_values <- c(p_values, fisher$p.value)
+  odds_ratios <- c(odds_ratios, fisher$estimate[[1]])
+}
+
+# Correct for the possibility of Type I errors.
+p_values <- p.adjust(p_values, method='BH')
+
+# Form a result data frame.
+df_out <- data.frame(outcome=idx, p_value=p_values,
+                     odds_ratio=odds_ratios)
+
+add_sig_columns <- function(df) {
+  df$level <- ''
+  df[df$p_value <= .05, 'level'] <- '*'
+  df[df$p_value <= .01, 'level'] <- '**'
+  df[df$p_value <= .001, 'level'] <- '***'
+  
+  df$dir <- ''
+  df[df$odds_ratio < 1, 'dir'] <- '-'
+  df[df$odds_ratio > 1, 'dir'] <- '+'
+  
+  return (df)
+}
+
+df_out <- add_sig_columns(df_out)
+print(knitr::kable(df_out))
+
+```
+
+
+## Binary Logistic Regression
+
+```{r}
+pred <- 'dog_adolescent_or_adult_training'
+
+for (outcome in outcomes) {
+  cat(paste(replicate(80, '-'), collapse=''))
+  cat(paste0('\n', outcome, '\n'))
+  f <- as.formula(paste0(outcome, '~', '.'))
+  
+  df_tmp <- df_combo_reward[,c(outcome, pred)]
+  #df_tmp <- apply_min_xtab(df_tmp, outcome)
+  
+  glm_fit <- glm(f, data=df_tmp, family='binomial')
+  print(summary(glm_fit))
+  print(exp(cbind(OR=coef(glm_fit), suppressMessages(confint(glm_fit)))))
+  #cat('\nVIF:\n')
+  #print(car::vif(glm_fit))
+  cat('\n')
+}
+```
+
+Let's consider what other factors may also come in to play:
+
+- Dog Age
+- Dog Sex
+- Acquiring the dog pre-adolescent
+- Pre-adolescent training
+
+We'll perform logistic regression to determine the impact of these factors. To
+perform logistic regression we'll need to ensure out data subsets have enough
+responses (`n >= 10`) for each possible answer to be included in the model.
+
+```{r}
+apply_min_xtab <- function(df, outcome, cutoff=10)
+{
+  drops <- NULL
+  for (col in names(df)) {
+    if (col == outcome) next
+    if (is.integer(df[,col])) next
+    if (is.numeric(df[,col])) next # added in order not to exclude dog age
+    
+    xtab <- table(df[,col], df[,outcome])
+    if (min(xtab) < cutoff) {
+      drops <- c(drops, col)
+      break
+    }
+  }
+  
+  if (length(drops) > 0) {
+    cat('\nDropped from model due to insufficient responses:\n')
+    cat(drops)
+    cat('\n')
+  }
+  
+  return(df[, !(names(df) %in% drops)])
+}
+```
+
+Now we perform the logistic regression.
+
+when including age (the only continuous variable)
+do not apply exclusion for min number of responses 
+
+```{r}
+pred <- 'dog_adolescent_or_adult_training'
+glm_attribs <- c(
+  'dog_age_in_months',
+  'dog_gender',
+  'dog_was_acquired_pre_adolescent',
+  'dog_attended_pre_adolescent_training'
+)
+for (outcome in outcomes) {
+  cat(paste(replicate(80, '-'), collapse=''))
+  cat(paste0('\n', outcome, '\n'))
+  f <- as.formula(paste0(outcome, '~', '.'))
+  
+  df_tmp <- df_combo_reward[,c(outcome, pred, glm_attribs)]
+  #do not apply min function-- this only excludes age, which is continuous
+  #df_tmp <- apply_min_xtab(df_tmp, outcome) 
+  
+  glm_fit <- glm(f, data=df_tmp, family='binomial')
+  print(summary(glm_fit))
+  print(exp(cbind(OR=coef(glm_fit), suppressMessages(confint(glm_fit)))))
+  cat('\nVIF:\n')
+  print(car::vif(glm_fit))
+  cat('\n')
+}
+
+
+```
+
+
+```{r}
+
+
+```
+
