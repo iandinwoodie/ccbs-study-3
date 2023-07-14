@@ -20,7 +20,7 @@ This data set can be cited as follows:
 ```txt
 Dinwoodie, Ian R., Keller, Elizabeth D., & Dodman, Nicholas H. (2023).
 Replication Data for: Does Adolescent and Adult Training Impact Canine Behavior
-Outcomes? (v1.1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7514532
+Outcomes? (v1.2.1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7514532
 ```
 
 ## Project Organization
